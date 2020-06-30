@@ -1,3 +1,6 @@
 [submodule "PedestrianBridge/KianCommons"]
 	path = PedestrianBridge/KianCommons
 	url = https://github.com/kianzarrin/KianCommons
+[submodule "NetowrkDetective/KianCommons"]
+	path = NetowrkDetective/KianCommons
+	url = https://github.com/kianzarrin/KianCommons.git
