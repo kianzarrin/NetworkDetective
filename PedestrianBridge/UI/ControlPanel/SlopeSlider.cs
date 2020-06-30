@@ -3,7 +3,7 @@ using UnityEngine;
 using KianCommons.UI;
 using KianCommons;
 
-namespace PedestrianBridge.UI.ControlPanel {
+namespace NetworkDetective.UI.ControlPanel {
     public class SlopeSlider : UISliderExt {
         public UILabel Label;
         bool started_ = false;

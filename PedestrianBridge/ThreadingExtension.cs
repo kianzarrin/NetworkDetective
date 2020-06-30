@@ -1,11 +1,11 @@
 
-namespace PedestrianBridge {
+namespace NetworkDetective {
     using System;
     using ICities;
     using UnityEngine;
     using static KianCommons.HelpersExtensions;
-    using PedestrianBridge.Tool;
-    using PedestrianBridge.UI;
+    using NetworkDetective.Tool;
+    using NetworkDetective.UI;
 
     public class ThreadingExtension : ThreadingExtensionBase{
         public override void OnUpdate(float realTimeDelta, float simulationTimeDelta) {

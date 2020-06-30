@@ -7,8 +7,8 @@
     <ProjectGuid>{3818BA07-D208-4D16-B078-DFA47D4B8BFA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PedestrianBridge</RootNamespace>
-    <AssemblyName>PedestrianBridge</AssemblyName>
+    <RootNamespace>NetowrkDetective</RootNamespace>
+    <AssemblyName>NetowrkDetective</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -109,15 +109,6 @@
     <Compile Include="KianCommons\KianCommons\Util\PluginUtil.cs" />
     <Compile Include="ControlCenter.cs" />
     <Compile Include="PedestrianBridgeMod.cs" />
-    <Compile Include="Shapes\RoadBridge\RoadBridgeWrapper.cs" />
-    <Compile Include="Shapes\RoadBridge\RoadSideWrapper.cs" />
-    <Compile Include="Shapes\Roundabout\RaboutWraper.cs" />
-    <Compile Include="Shapes\Junction\JunctionWrapper.cs" />
-    <Compile Include="Shapes\Junction\LWarapper.cs" />
-    <Compile Include="Shapes\Netwrapper\NodeWrapper.cs" />
-    <Compile Include="Shapes\PathConnectWrapper.cs" />
-    <Compile Include="Shapes\Roundabout\RaboutSlice.cs" />
-    <Compile Include="Shapes\Netwrapper\SegmentWrapper.cs" />
     <Compile Include="TestsExperiments.cs" />
     <Compile Include="ThreadingExtension.cs" />
     <Compile Include="Tool\KianToolBase.cs" />
@@ -131,18 +122,16 @@
     <Compile Include="UI\Settings.cs" />
     <Compile Include="Util\RoundaboutUtil.cs" />
     <Compile Include="Util\TMPEUtil.cs" />
-    <Compile Include="UI\PedestrianBridgeButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\PluginUtil.cs" />
     <Compile Include="Util\PrefabUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\sprites.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".editorconfig" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="KianCommons\.gitattributes" />
     <Content Include="KianCommons\.gitignore" />

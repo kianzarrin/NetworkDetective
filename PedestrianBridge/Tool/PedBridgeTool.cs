@@ -2,13 +2,12 @@ using ColossalFramework;
 using ColossalFramework.UI;
 using System;
 using UnityEngine;
-using PedestrianBridge.Util;
-using PedestrianBridge.UI;
-using PedestrianBridge.Shapes;
+using NetworkDetective.Util;
+using NetworkDetective.UI;
 using KianCommons;
-using PedestrianBridge.UI.ControlPanel;
+using NetworkDetective.UI.ControlPanel;
 
-namespace PedestrianBridge.Tool {
+namespace NetworkDetective.Tool {
     using static KianCommons.UI.RenderUtil;
 
     public sealed class PedBridgeTool : KianToolBase {

@@ -1,11 +1,11 @@
 using ICities;
 using JetBrains.Annotations;
 using System;
-using PedestrianBridge.Util;
+using NetworkDetective.Util;
 using KianCommons;
-using PedestrianBridge.UI.ControlPanel;
+using NetworkDetective.UI.ControlPanel;
 
-namespace PedestrianBridge {
+namespace NetworkDetective {
     public class PedestrianBridgeMod : IUserMod {
         public static Version ModVersion => typeof(PedestrianBridgeMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);

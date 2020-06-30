@@ -2,11 +2,11 @@ using ColossalFramework.UI;
 using ICities;
 using ColossalFramework;
 
-namespace PedestrianBridge.UI {
+namespace NetworkDetective.UI {
     using Tool;
     using KianCommons.UI;
     public static class ModSettings {
-        public const string FILE_NAME = nameof(PedestrianBridge);
+        public const string FILE_NAME = nameof(NetworkDetective);
         static ModSettings() {
             // Creating setting file - from SamsamTS
             if (GameSettings.FindSettingsFileByName(FILE_NAME) == null) {

@@ -6,7 +6,7 @@ using System;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace PedestrianBridge.UI.ControlPanel {
+namespace NetworkDetective.UI.ControlPanel {
     public class ElevationSlider:UISliderExt {
         public static ElevationSlider Instance { get; private set; }
         public UILabel Label;

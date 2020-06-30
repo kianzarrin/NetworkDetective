@@ -1,9 +1,9 @@
 using ColossalFramework;
 using KianCommons;
-using PedestrianBridge.UI;
-using PedestrianBridge.Util;
+using NetworkDetective.UI;
+using NetworkDetective.Util;
 
-namespace PedestrianBridge {
+namespace NetworkDetective {
     public enum RoundaboutBridgeStyleT {
         Star,
         InnerCircle,

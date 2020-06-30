@@ -2,7 +2,7 @@ using ColossalFramework.UI;
 using KianCommons;
 using KianCommons.UI;
 
-namespace PedestrianBridge.UI.ControlPanel {
+namespace NetworkDetective.UI.ControlPanel {
     public class StyleInnerCircleCheckBox : UICheckBoxExt {
         public static StyleInnerCircleCheckBox Instance { get; private set; }
 

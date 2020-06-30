@@ -1,7 +1,7 @@
 using ColossalFramework.Plugins;
 using ICities;
 
-namespace PedestrianBridge.Util {
+namespace NetworkDetective.Util {
     using KianCommons;
     public static class PluginUtil {
         public static bool FineRoadToolDetected => PluginDetected("FineRoadTool");

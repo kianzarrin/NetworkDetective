@@ -1,4 +1,4 @@
-namespace PedestrianBridge.Util {
+namespace NetworkDetective.Util {
     using CSUtil.Commons;
     using System.Collections.Generic;
     using System;

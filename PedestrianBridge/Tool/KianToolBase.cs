@@ -7,7 +7,7 @@ using static KianCommons.HelpersExtensions;
 using KianCommons;
 using ColossalFramework.Math;
 
-namespace PedestrianBridge.Tool {
+namespace NetworkDetective.Tool {
     public abstract class KianToolBase : DefaultTool
     {
         public bool ToolEnabled => ToolsModifierControl.toolController?.CurrentTool == this;

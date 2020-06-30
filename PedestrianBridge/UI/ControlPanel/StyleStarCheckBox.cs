@@ -1,7 +1,7 @@
 using ColossalFramework.UI;
 using KianCommons.UI;
 
-namespace PedestrianBridge.UI.ControlPanel {
+namespace NetworkDetective.UI.ControlPanel {
     public class StyleStarCheckBox: UICheckBoxExt{
         public static StyleStarCheckBox Instance { get; private set; }
 

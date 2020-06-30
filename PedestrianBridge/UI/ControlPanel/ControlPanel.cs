@@ -1,4 +1,4 @@
-namespace PedestrianBridge.UI.ControlPanel {
+namespace NetworkDetective.UI.ControlPanel {
     using ColossalFramework;
     using ColossalFramework.UI;
     using KianCommons;

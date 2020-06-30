@@ -1,4 +1,4 @@
-namespace PedestrianBridge.Util {
+namespace NetworkDetective.Util {
     using System.Runtime.CompilerServices;
     using KianCommons;
     public static class TMPEUtil {

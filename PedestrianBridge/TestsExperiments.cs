@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace PedestrianBridge {
+namespace NetworkDetective {
     using Util;
     public static class TestsExperiments {
         public static void Run() {

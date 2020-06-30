@@ -1,4 +1,4 @@
-namespace PedestrianBridge.Util {
+namespace NetworkDetective.Util {
     using KianCommons;
     using System;
 
