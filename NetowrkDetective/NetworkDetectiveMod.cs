@@ -6,8 +6,8 @@ using KianCommons;
 using NetworkDetective.UI.ControlPanel;
 
 namespace NetworkDetective {
-    public class PedestrianBridgeMod : IUserMod {
-        public static Version ModVersion => typeof(PedestrianBridgeMod).Assembly.GetName().Version;
+    public class NetworkDetectiveMod : IUserMod {
+        public static Version ModVersion => typeof(NetworkDetectiveMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);
         public string Name => "Automatic Pedestrian Bridge" + VersionString;
         public string Description => "use Ctrl+B to activate. " +
@@ -34,10 +34,10 @@ namespace NetworkDetective {
         public static void Load() {
             TMPEUtil.Active = true;
             ControlPanel.Create();
-            Tool.PedBridgeTool.Create();
+            Tool.NetworkDetectiveTool.Create();
         }
         public static void Release() {
-            Tool.PedBridgeTool.Remove();
+            Tool.NetworkDetectiveTool.Remove();
             ControlPanel.Release();
         }
     }

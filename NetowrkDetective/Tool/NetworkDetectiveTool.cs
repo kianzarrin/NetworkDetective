@@ -10,7 +10,7 @@ using NetworkDetective.UI.ControlPanel;
 namespace NetworkDetective.Tool {
     using static KianCommons.UI.RenderUtil;
 
-    public sealed class PedBridgeTool : KianToolBase {
+    public sealed class NetworkDetectiveTool : KianToolBase {
         public static readonly SavedInputKey ActivationShortcut = new SavedInputKey(
             "ActivationShortcut",
             UI.ModSettings.FILE_NAME,
@@ -20,21 +20,21 @@ namespace NetworkDetective.Tool {
         UIButton button;
 
         protected override void Awake() {
-            button = PedestrianBridgeButton.CreateButton();
+            //button = PedestrianBridgeButton.CreateButton();
             base.Awake();
         }
 
-        public static PedBridgeTool Create() {
+        public static NetworkDetectiveTool Create() {
             Log.Info("PedBridgeTool.Create()");
             GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
-            var tool = toolModControl.GetComponent<PedBridgeTool>() ?? toolModControl.AddComponent<PedBridgeTool>();
+            var tool = toolModControl.GetComponent<NetworkDetectiveTool>() ?? toolModControl.AddComponent<NetworkDetectiveTool>();
             return tool;
         }
 
-        public static PedBridgeTool Instance {
+        public static NetworkDetectiveTool Instance {
             get {
                 GameObject toolModControl = ToolsModifierControl.toolController?.gameObject;
-                return toolModControl?.GetComponent<PedBridgeTool>();
+                return toolModControl?.GetComponent<NetworkDetectiveTool>();
             }
         }
 
@@ -77,7 +77,6 @@ namespace NetworkDetective.Tool {
             ToolCursor = HoverValid ? NetUtil.netTool.m_upgradeCursor : null;
         }
 
-        PathConnectWrapper? _cachedPathConnectWrapper;
         Vector3 _cachedHitPos;
 
 

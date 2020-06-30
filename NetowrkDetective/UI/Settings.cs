@@ -18,7 +18,7 @@ namespace NetworkDetective.UI {
             UIHelper group = helper.AddGroup("Pedestrian Bridge") as UIHelper;
             UIPanel panel = group.self as UIPanel;
             var keymappings = panel.gameObject.AddComponent<UIKeymappingsPanel>();
-            keymappings.AddKeymapping("Activation Shortcut", PedBridgeTool.ActivationShortcut);
+            keymappings.AddKeymapping("Activation Shortcut", NetworkDetectiveTool.ActivationShortcut);
         }
     }
 }

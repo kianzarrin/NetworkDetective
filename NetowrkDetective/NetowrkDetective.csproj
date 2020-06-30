@@ -108,11 +108,11 @@
     <Compile Include="KianCommons\KianCommons\Util\NetUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Util\PluginUtil.cs" />
     <Compile Include="ControlCenter.cs" />
-    <Compile Include="PedestrianBridgeMod.cs" />
+    <Compile Include="NetworkDetectiveMod.cs" />
     <Compile Include="TestsExperiments.cs" />
     <Compile Include="ThreadingExtension.cs" />
     <Compile Include="Tool\KianToolBase.cs" />
-    <Compile Include="Tool\PedBridgeTool.cs" />
+    <Compile Include="Tool\NetworkDetectiveTool.cs" />
     <Compile Include="UI\ControlPanel\SlopeSlider.cs" />
     <Compile Include="UI\ControlPanel\ElevationSlider.cs" />
     <Compile Include="UI\ControlPanel\StyleInnerCircleCheckBox.cs" />
