@@ -9,9 +9,9 @@ namespace NetworkDetective {
     public class NetworkDetectiveMod : IUserMod {
         public static Version ModVersion => typeof(NetworkDetectiveMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);
-        public string Name => "Automatic Pedestrian Bridge" + VersionString;
+        public string Name => "Network detective" + VersionString;
         public string Description => "use Ctrl+B to activate. " +
-            "Automatically builds pedestrian bridges over junctions and roundabouts with one click";
+            "gives information about segment, nodes and lanes.";
         
         public void OnEnabled() {
             if (HelpersExtensions.InGame)

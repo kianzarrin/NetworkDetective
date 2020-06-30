@@ -14,7 +14,7 @@ namespace NetworkDetective.Tool {
         public static readonly SavedInputKey ActivationShortcut = new SavedInputKey(
             "ActivationShortcut",
             UI.ModSettings.FILE_NAME,
-            SavedInputKey.Encode(KeyCode.B, true, false, false),
+            SavedInputKey.Encode(KeyCode.D, true, false, false),
             true);
 
         UIButton button;
@@ -25,7 +25,7 @@ namespace NetworkDetective.Tool {
         }
 
         public static NetworkDetectiveTool Create() {
-            Log.Info("PedBridgeTool.Create()");
+            Log.Info("NetworkDetectiveTool.Create()");
             GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
             var tool = toolModControl.GetComponent<NetworkDetectiveTool>() ?? toolModControl.AddComponent<NetworkDetectiveTool>();
             return tool;
@@ -39,24 +39,24 @@ namespace NetworkDetective.Tool {
         }
 
         public static void Remove() {
-            Log.Debug("PedBridgeTool.Remove()");
+            Log.Debug("NetworkDetectiveTool.Remove()");
             var tool = Instance;
             if (tool != null)
                 Destroy(tool);
         }
 
         protected override void OnDestroy() {
-            Log.Debug("PedBridgeTool.OnDestroy()\n" + Environment.StackTrace);
+            Log.Debug("NetworkDetectiveTool.OnDestroy()\n" + Environment.StackTrace);
             button?.Hide();
             Destroy(button);
             base.OnDestroy();
         }
 
-        //public override void EnableTool() => ToolsModifierControl.SetTool<PedBridgeTool>();
+        //public override void EnableTool() => ToolsModifierControl.SetTool<NetworkDetectiveTool>();
 
         protected override void OnEnable() {
             ControlPanel.Instance?.Open();
-            Log.Debug("PedBridgeTool.OnEnable");
+            Log.Debug("NetworkDetectiveTool.OnEnable");
             button.Focus();
             base.OnEnable();
             button.Focus();
@@ -65,7 +65,7 @@ namespace NetworkDetective.Tool {
 
         protected override void OnDisable() {
             ControlPanel.Instance?.Close();
-            Log.Debug("PedBridgeTool.OnDisable");
+            Log.Debug("NetworkDetectiveTool.OnDisable");
             button?.Unfocus();
             base.OnDisable();
             button?.Unfocus();

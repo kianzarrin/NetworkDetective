@@ -107,7 +107,6 @@
     <Compile Include="KianCommons\KianCommons\Util\Log.cs" />
     <Compile Include="KianCommons\KianCommons\Util\NetUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Util\PluginUtil.cs" />
-    <Compile Include="ControlCenter.cs" />
     <Compile Include="NetworkDetectiveMod.cs" />
     <Compile Include="TestsExperiments.cs" />
     <Compile Include="ThreadingExtension.cs" />
@@ -115,22 +114,17 @@
     <Compile Include="Tool\NetworkDetectiveTool.cs" />
     <Compile Include="UI\ControlPanel\SlopeSlider.cs" />
     <Compile Include="UI\ControlPanel\ElevationSlider.cs" />
-    <Compile Include="UI\ControlPanel\StyleInnerCircleCheckBox.cs" />
-    <Compile Include="UI\ControlPanel\StyleStarCheckBox.cs" />
     <Compile Include="UI\ControlPanel\ControlPanel.cs" />
     <Compile Include="UI\ControlPanel\UnderpassCheckbox.cs" />
     <Compile Include="UI\Settings.cs" />
-    <Compile Include="Util\RoundaboutUtil.cs" />
-    <Compile Include="Util\TMPEUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\PluginUtil.cs" />
-    <Compile Include="Util\PrefabUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="KianCommons\.gitattributes" />
