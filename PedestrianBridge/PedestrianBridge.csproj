@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3818BA07-D208-4D16-B078-DFA47D4B8BFA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PedestrianBridge</RootNamespace>
+    <AssemblyName>PedestrianBridge</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MangedDLLPath>..\dependencies</MangedDLLPath>
+    <SteamPath>~/Library/Application Support/Steam/</SteamPath>
+    <SteamPath Condition="! Exists ('$(SteamPath)')">$(ProgramFiles)\Steam</SteamPath>
+    <SteamPath Condition="! Exists ('$(SteamPath)')">$(Registry:HKEY_CURRENT_USER\Software\Valve\Steam@SteamPath)</SteamPath>
+    <CSPath>$(SteamPath)\steamapps\common\Cities_Skylines</CSPath>
+    <MangedDLLPath Condition="!  Exists ('$(MangedDLLPath)')">$(CSPath)\Cities_Data\Managed</MangedDLLPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(MangedDLLPath)\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ColossalManaged">
+      <HintPath>$(MangedDLLPath)\ColossalManaged.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CSUtil.Commons, Version=1.0.7347.7474, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\CSUtil.Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="FineRoadTool">
+      <HintPath>..\..\AutomaticRoundaboutBuilder\dependencies\FineRoadTool.dll</HintPath>
+    </Reference>
+    <Reference Include="ICities">
+      <HintPath>$(MangedDLLPath)\ICities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TrafficManager">
+      <HintPath>..\libs\TrafficManager.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(MangedDLLPath)\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>$(MangedDLLPath)\UnityEngine.Networking.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(MangedDLLPath)\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KianCommons\KianCommons\Math\BezierUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\ControlPoint2.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\ControlPoint3.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\CubicBezier3.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\LineUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\MathUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\VecetorUtils.cs" />
+    <None Include="KianCommons\KianCommons\Patches\TranspilerUtils.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\Vector2D.cs" />
+    <Compile Include="KianCommons\KianCommons\Math\Vector3D.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\Helpers\UIAutoSizePanel.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\Helpers\UIButtonExt.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\Helpers\UICheckBoxExt.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\Helpers\UISliderExt.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\RenderUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\TextureUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\UIKeymappingsPanel.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\UIToolButton.cs" />
+    <Compile Include="KianCommons\KianCommons\UI\UIUtils.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\GridUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\HelpersExtensions.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\Log.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\NetUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\PluginUtil.cs" />
+    <Compile Include="ControlCenter.cs" />
+    <Compile Include="PedestrianBridgeMod.cs" />
+    <Compile Include="Shapes\RoadBridge\RoadBridgeWrapper.cs" />
+    <Compile Include="Shapes\RoadBridge\RoadSideWrapper.cs" />
+    <Compile Include="Shapes\Roundabout\RaboutWraper.cs" />
+    <Compile Include="Shapes\Junction\JunctionWrapper.cs" />
+    <Compile Include="Shapes\Junction\LWarapper.cs" />
+    <Compile Include="Shapes\Netwrapper\NodeWrapper.cs" />
+    <Compile Include="Shapes\PathConnectWrapper.cs" />
+    <Compile Include="Shapes\Roundabout\RaboutSlice.cs" />
+    <Compile Include="Shapes\Netwrapper\SegmentWrapper.cs" />
+    <Compile Include="TestsExperiments.cs" />
+    <Compile Include="ThreadingExtension.cs" />
+    <Compile Include="Tool\KianToolBase.cs" />
+    <Compile Include="Tool\PedBridgeTool.cs" />
+    <Compile Include="UI\ControlPanel\SlopeSlider.cs" />
+    <Compile Include="UI\ControlPanel\ElevationSlider.cs" />
+    <Compile Include="UI\ControlPanel\StyleInnerCircleCheckBox.cs" />
+    <Compile Include="UI\ControlPanel\StyleStarCheckBox.cs" />
+    <Compile Include="UI\ControlPanel\ControlPanel.cs" />
+    <Compile Include="UI\ControlPanel\UnderpassCheckbox.cs" />
+    <Compile Include="UI\Settings.cs" />
+    <Compile Include="Util\RoundaboutUtil.cs" />
+    <Compile Include="Util\TMPEUtil.cs" />
+    <Compile Include="UI\PedestrianBridgeButton.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\PluginUtil.cs" />
+    <Compile Include="Util\PrefabUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\sprites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="KianCommons\.gitattributes" />
+    <Content Include="KianCommons\.gitignore" />
+    <Content Include="KianCommons\KianCommons.sln" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="PostBuildMacros">
+    <!-- Code from https://superuser.com/questions/82231/how-do-i-do-comments-at-a-windows-command-prompt -->
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>set "DEPLOYDIR=$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(TargetName)\"
+
+del  "%25DEPLOYDIR%25$(TargetFileName)"
+xcopy /y /v "$(TargetDir)$(TargetFileName)" "%25DEPLOYDIR%25"
+
+echo THE ASSEMBLY VERSION IS: @(VersionNumber) created at %25time%25
+set DEPLOYDIR=</PostBuildEvent>
+  </PropertyGroup>
+</Project>
