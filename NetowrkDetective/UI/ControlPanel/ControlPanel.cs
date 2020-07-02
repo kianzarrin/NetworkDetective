@@ -3,7 +3,12 @@ namespace NetworkDetective.UI.ControlPanel {
     using ColossalFramework.UI;
     using KianCommons;
     using KianCommons.UI;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Reflection.Emit;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class ControlPanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
@@ -14,6 +19,23 @@ namespace NetworkDetective.UI.ControlPanel {
         #region Instanciation
         public static ControlPanel Instance { get; private set; }
 
+        private InstanceID _instanceID;
+
+        public InstanceID InstanceID {
+            get => _instanceID;
+            set {
+                _instanceID = value;
+                DisplayTitle();
+                Populate();
+                DisplayDetails(value);
+            }
+        }
+
+        public List<InterAvtiveButton> InterAvtiveButtons;
+        public UIAutoSizePanel ContainerPanel;
+        public UIAutoSizePanel PupulatablePanel;
+        public UILabel Details;
+        public InterAvtiveButton Title;
 
         public static ControlPanel Create() {
             var uiView = UIView.GetAView();
@@ -30,7 +52,7 @@ namespace NetworkDetective.UI.ControlPanel {
         public override void Awake() {
             base.Awake();
             Instance = this;
-            isVisible = false;
+            isVisible = true;
         }
 
         public override void Start() {
@@ -51,63 +73,123 @@ namespace NetworkDetective.UI.ControlPanel {
                 dragHandle_.target = parent;
 
                 var lblCaption = dragHandle_.AddUIComponent<UILabel>();
-                lblCaption.text = "Overpass builder";
+                lblCaption.text = "Network Detective";
                 lblCaption.relativePosition = new Vector3(65, 14, 0);
 
-                var sprite = dragHandle_.AddUIComponent<UISprite>();
-                sprite.size = new Vector2(40, 40);
-                sprite.relativePosition = new Vector3(5, 2.5f, 0);
-                sprite.atlas = TextureUtil.GetAtlas(PedestrianBridgeButton.ATLAS_NAME);
-                sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
+                //var sprite = dragHandle_.AddUIComponent<UISprite>();
+                //sprite.size = new Vector2(40, 40);
+                //sprite.relativePosition = new Vector3(5, 2.5f, 0);
+                //sprite.atlas = TextureUtil.GetAtlas(PedestrianBridgeButton.ATLAS_NAME);
+                //sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
             }
 
+            AddSpacePanel(this, 10);
 
             {
                 var panel = AddPanel();
-                var label = panel.AddUIComponent<UILabel>();
-                label.text = "Roundabout Styles:";
-                panel.AddUIComponent<StyleStarCheckBox>();
-                panel.AddUIComponent<StyleInnerCircleCheckBox>();
+                Title = panel.AddUIComponent<InterAvtiveButton>();
             }
+
+            AddSpacePanel(this, 5);
+            ContainerPanel = AddPanel();
+            AddSpacePanel(this, 10);
 
             {
                 var panel = AddPanel();
-                var label = panel.AddUIComponent<UILabel>();
-                label.text = "Elevation";
-                label.tooltip = "Height of the pedestrian overpass.";
-                var slider = panel.AddUIComponent<ElevationSlider>();
-                slider.Label = label;
-
+                Details = panel.AddUIComponent<UILabel>();
             }
-
-            {
-                var panel = AddPanel();
-                panel.AddUIComponent<UnderpassCheckbox>();
-            }
-
-            {
-                var panel = AddPanel();
-                var label = panel.AddUIComponent<UILabel>();
-                label.text = "Slope";
-                label.tooltip = "steepness of pedesterian paths.";
-                var slider = panel.AddUIComponent<SlopeSlider>();
-                slider.Label = label;
-            }
-
-            //{
-            //    var panel = AddPanel();
-            //    var button = panel.AddUIComponent<UIResetButton>();
-            //}
         }
 
-        UIAutoSizePanel AddPanel() {
+        UIAutoSizePanel AddPanel() => AddPanel(this);
+
+        static UIAutoSizePanel AddPanel(UIPanel panel) {
             int pad_horizontal = 10;
-            int pad_vertical = 5;
-            UIAutoSizePanel panel = AddUIComponent<UIAutoSizePanel>();
-            panel.width = width - pad_horizontal * 2;
-            panel.autoLayoutPadding =
+            int pad_vertical = 0;
+            UIAutoSizePanel newPanel = panel.AddUIComponent<UIAutoSizePanel>();
+            newPanel.width = panel.width - pad_horizontal * 2;
+            newPanel.autoLayoutPadding =
                 new RectOffset(pad_horizontal, pad_horizontal, pad_vertical, pad_vertical);
+            return newPanel;
+        }
+
+        static UIPanel AddSpacePanel(UIPanel panel, int space) {
+            panel = panel.AddUIComponent<UIPanel>();
+            panel.width = panel.width;
+            panel.height = space;
             return panel;
+        }
+
+        public void Populate() {
+            if (PupulatablePanel != null) {
+                PupulatablePanel.Hide();
+                Destroy(PupulatablePanel);
+            }
+
+            PupulatablePanel = AddPanel(PupulatablePanel);
+            InterAvtiveButtons = new List<InterAvtiveButton>(32);
+            if (InstanceID.Type == InstanceType.NetSegment) {
+                PupulateSegmentMembers(PupulatablePanel, InstanceID.NetSegment);
+            }
+            RefreshSizeRecursive();
+        }
+
+        void PupulateSegmentMembers(UIAutoSizePanel panel,  ushort segmentId) {
+            {
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_startNode };
+                item.text = "StartNode: " + item.InstanceID.NetNode;
+                InterAvtiveButtons.Add(item);
+            }
+            {
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_endNode };
+                item.text = "EndNode: " + item.InstanceID.NetNode;
+                InterAvtiveButtons.Add(item);
+            }
+
+            AddSpacePanel(panel, 3);
+
+            foreach(var laneData in NetUtil.IterateLanes(segmentId)) {
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                item.InstanceID = new InstanceID { NetLane = laneData.LaneID };
+                item.text = "Lane: " + item.InstanceID.NetLane;
+                InterAvtiveButtons.Add(item);
+            }
+        }
+
+        public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
+            foreach(var item in InterAvtiveButtons) {
+                if (item.IsHovered) {
+                    item.RenderOverlay(cameraInfo);
+                    return;
+                } 
+            }
+            Title.RenderOverlay(cameraInfo);
+        }
+
+        public void DisplayTitle() {
+            Title.text = InstanceID.Type switch
+            {
+                InstanceType.NetNode => "Node: " + InstanceID.NetSegment,
+                InstanceType.NetSegment => "Segment: " + InstanceID.NetSegment,
+                InstanceType.NetLane => "Lane: " + InstanceID.NetSegment,
+                _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
+            };
+        }
+
+        public void DisplayDetails(InstanceID? instanceID = null) {
+            Details.text = GetDetails(instanceID ?? InstanceID);
+            RefreshSizeRecursive();
+        }
+
+        public static string GetDetails(InstanceID instanceID) {
+            return instanceID.Type switch
+            {
+                InstanceType.NetNode => "node flags: " + instanceID.NetNode.ToNode().m_flags,
+                InstanceType.NetSegment => "segment flags: " + instanceID.NetNode.ToNode().m_flags,
+                InstanceType.NetLane => "lane flags: " + instanceID.NetNode.ToNode().m_flags,
+                _ => "Unexpected InstanceID.Type: " + instanceID.Type,
+            };
         }
 
         protected override void OnPositionChanged() {
@@ -123,19 +205,6 @@ namespace NetworkDetective.UI.ControlPanel {
             SavedX.value = absolutePosition.x;
             SavedY.value = absolutePosition.y;
             Log.Debug("absolutePosition: " + absolutePosition);
-        }
-
-        public void Open() {
-            Show();
-            Refresh();
-        }
-
-        public void Close() {
-            Hide();
-        }
-
-        public void Refresh() {
-            RefreshSizeRecursive();
         }
     }
 }

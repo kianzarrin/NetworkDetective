@@ -1,7 +1,6 @@
 using ICities;
 using JetBrains.Annotations;
 using System;
-using NetworkDetective.Util;
 using KianCommons;
 using NetworkDetective.UI.ControlPanel;
 
@@ -32,12 +31,11 @@ namespace NetworkDetective {
 
     public static class LoadTool {
         public static void Load() {
-            TMPEUtil.Active = true;
             ControlPanel.Create();
-            Tool.NetworkDetectiveTool.Create();
+            //Tool.NetworkDetectiveTool.Create();
         }
         public static void Release() {
-            Tool.NetworkDetectiveTool.Remove();
+            //Tool.NetworkDetectiveTool.Remove();
             ControlPanel.Release();
         }
     }

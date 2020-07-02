@@ -7,8 +7,8 @@
     <ProjectGuid>{3818BA07-D208-4D16-B078-DFA47D4B8BFA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetowrkDetective</RootNamespace>
-    <AssemblyName>NetowrkDetective</AssemblyName>
+    <RootNamespace>NetoworkDetective</RootNamespace>
+    <AssemblyName>NetworkDetective</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -49,13 +49,6 @@
       <HintPath>$(MangedDLLPath)\ColossalManaged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="CSUtil.Commons, Version=1.0.7347.7474, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\CSUtil.Commons.dll</HintPath>
-    </Reference>
-    <Reference Include="FineRoadTool">
-      <HintPath>..\..\AutomaticRoundaboutBuilder\dependencies\FineRoadTool.dll</HintPath>
-    </Reference>
     <Reference Include="ICities">
       <HintPath>$(MangedDLLPath)\ICities.dll</HintPath>
       <Private>False</Private>
@@ -74,6 +67,13 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>$(MangedDLLPath)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="CSUtil.Commons, Version=1.0.7347.7474, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\CSUtil.Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="FineRoadTool">
+      <HintPath>..\..\AutomaticRoundaboutBuilder\dependencies\FineRoadTool.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -112,10 +112,8 @@
     <Compile Include="ThreadingExtension.cs" />
     <Compile Include="Tool\KianToolBase.cs" />
     <Compile Include="Tool\NetworkDetectiveTool.cs" />
-    <Compile Include="UI\ControlPanel\SlopeSlider.cs" />
-    <Compile Include="UI\ControlPanel\ElevationSlider.cs" />
+    <Compile Include="UI\ControlPanel\InterAvtiveButton.cs" />
     <Compile Include="UI\ControlPanel\ControlPanel.cs" />
-    <Compile Include="UI\ControlPanel\UnderpassCheckbox.cs" />
     <Compile Include="UI\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
