@@ -3,6 +3,7 @@ using ColossalFramework.UI;
 using KianCommons;
 using NetworkDetective.UI.ControlPanel;
 using System;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace NetworkDetective.Tool {
@@ -36,6 +37,8 @@ namespace NetworkDetective.Tool {
             }
         }
 
+        public InstanceID SelectedInstanceID { get; private set; }
+
         public static void Remove() {
             Log.Debug("NetworkDetectiveTool.Remove()");
             var tool = Instance;
@@ -53,7 +56,7 @@ namespace NetworkDetective.Tool {
         //public override void EnableTool() => ToolsModifierControl.SetTool<NetworkDetectiveTool>();
 
         protected override void OnEnable() {
-            ControlPanel.Instance?.Open();
+            DisplayPlanel.Instance?.Display(InstanceID.Empty);
             Log.Debug("NetworkDetectiveTool.OnEnable");
             button.Focus();
             base.OnEnable();
@@ -62,7 +65,7 @@ namespace NetworkDetective.Tool {
         }
 
         protected override void OnDisable() {
-            ControlPanel.Instance?.Close();
+            DisplayPlanel.Instance?.Close();
             Log.Debug("NetworkDetectiveTool.OnDisable");
             button?.Unfocus();
             base.OnDisable();
@@ -75,26 +78,39 @@ namespace NetworkDetective.Tool {
             ToolCursor = HoverValid ? NetUtil.netTool.m_upgradeCursor : null;
         }
 
-        Vector3 _cachedHitPos;
-
+        public InstanceID GetHoveredInstanceID() {
+            if (HelpersExtensions.ControlIsPressed) {
+                return new InstanceID { NetNode = HoveredNodeId };
+            } else {
+                return new InstanceID { NetSegment = HoveredSegmentId };
+            }
+        }
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
             base.RenderOverlay(cameraInfo);
             if (!HoverValid)return;
-            Color color = GetToolColor(Input.GetMouseButton(0), false);
-            NetTool.RenderOverlay(cameraInfo, ref HoveredSegmentId.ToSegment(), color, color);
-
-            //DrawOverlayCircle(cameraInfo, Color.red, HitPos, 1, true);
+            InstanceID instanceID = new InstanceID { NetSegment = HoveredSegmentId };
+            DisplayPlanel.Instance.Display(GetHoveredInstanceID());
+            DisplayPlanel.Instance.RenderOverlay(cameraInfo);
         }
 
         protected override void OnPrimaryMouseClicked() {
             if (!HoverValid)
                 return;
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
+            if (HelpersExtensions.ControlIsPressed) {
+                
+            } else {
+                // segment selection mode:
+                SelectedInstanceID = GetHoveredInstanceID();
+            }
         }
 
         protected override void OnSecondaryMouseClicked() {
-            //throw new System.NotImplementedException();
+            if (SelectedInstanceID.IsEmpty)
+                DisableTool();
+            else
+                SelectedInstanceID = InstanceID.Empty;
         }
     } //end class
 }

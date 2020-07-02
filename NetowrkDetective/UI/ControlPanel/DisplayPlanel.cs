@@ -10,24 +10,22 @@ namespace NetworkDetective.UI.ControlPanel {
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class ControlPanel : UIAutoSizePanel {
+    public class DisplayPlanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);
         public static readonly SavedFloat SavedY = new SavedFloat(
             "PanelY", ModSettings.FILE_NAME, 58, true);
 
         #region Instanciation
-        public static ControlPanel Instance { get; private set; }
-
-        private InstanceID _instanceID;
+        public static DisplayPlanel Instance { get; private set; }
 
         public InstanceID InstanceID {
-            get => _instanceID;
+            get => Title.InstanceID;
             set {
-                _instanceID = value;
-                DisplayTitle();
+                Title.InstanceID = value;
+                UpdateTitle();
                 Populate();
-                DisplayDetails(value);
+                UpdateDetails(value);
             }
         }
 
@@ -37,9 +35,9 @@ namespace NetworkDetective.UI.ControlPanel {
         public UILabel Details;
         public InterAvtiveButton Title;
 
-        public static ControlPanel Create() {
+        public static DisplayPlanel Create() {
             var uiView = UIView.GetAView();
-            ControlPanel panel = uiView.AddUIComponent(typeof(ControlPanel)) as ControlPanel;
+            DisplayPlanel panel = uiView.AddUIComponent(typeof(DisplayPlanel)) as DisplayPlanel;
             return panel;
         }
 
@@ -98,6 +96,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 var panel = AddPanel();
                 Details = panel.AddUIComponent<UILabel>();
             }
+
+            Hide();
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -167,7 +167,11 @@ namespace NetworkDetective.UI.ControlPanel {
             Title.RenderOverlay(cameraInfo);
         }
 
-        public void DisplayTitle() {
+        public void UpdateTitle() {
+            if (InstanceID.IsEmpty) {
+                Title.text = "0";
+                return;
+            }
             Title.text = InstanceID.Type switch
             {
                 InstanceType.NetNode => "Node: " + InstanceID.NetSegment,
@@ -177,12 +181,14 @@ namespace NetworkDetective.UI.ControlPanel {
             };
         }
 
-        public void DisplayDetails(InstanceID? instanceID = null) {
+        public void UpdateDetails(InstanceID? instanceID = null) {
             Details.text = GetDetails(instanceID ?? InstanceID);
             RefreshSizeRecursive();
         }
 
         public static string GetDetails(InstanceID instanceID) {
+            if (instanceID.IsEmpty)
+                return "Please Hover/Select a network";
             return instanceID.Type switch
             {
                 InstanceType.NetNode => "node flags: " + instanceID.NetNode.ToNode().m_flags,
@@ -190,6 +196,18 @@ namespace NetworkDetective.UI.ControlPanel {
                 InstanceType.NetLane => "lane flags: " + instanceID.NetNode.ToNode().m_flags,
                 _ => "Unexpected InstanceID.Type: " + instanceID.Type,
             };
+        }
+
+        public void Display(InstanceID instanceID) {
+            if (isVisible && InstanceID == instanceID)
+                return;
+            Show();
+            InstanceID = instanceID;
+            RefreshSizeRecursive();
+        }
+
+        public void Close() {
+            Hide();
         }
 
         protected override void OnPositionChanged() {

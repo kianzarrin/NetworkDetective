@@ -31,12 +31,12 @@ namespace NetworkDetective {
 
     public static class LoadTool {
         public static void Load() {
-            ControlPanel.Create();
+            DisplayPlanel.Create();
             //Tool.NetworkDetectiveTool.Create();
         }
         public static void Release() {
             //Tool.NetworkDetectiveTool.Remove();
-            ControlPanel.Release();
+            DisplayPlanel.Release();
         }
     }
 

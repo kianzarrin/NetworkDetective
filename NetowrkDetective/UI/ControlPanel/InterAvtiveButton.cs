@@ -56,8 +56,9 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public LaneData LaneData { get; private set; } //optional. only valid for lanes.
 
-
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
+            if (InstanceID.IsEmpty)
+                return;
             switch (InstanceID.Type) {
                 case InstanceType.NetLane:
                     RenderUtil.RenderLaneOverlay(cameraInfo, LaneData, Color.blue, false);
@@ -82,13 +83,13 @@ namespace NetworkDetective.UI.ControlPanel {
         protected override void OnMouseEnter(UIMouseEventParameter p) {
             base.OnMouseEnter(p);
             Log.Debug("AvtiveLabel.OnMouseEnter");
-            ControlPanel.Instance.DisplayDetails(InstanceID);
+            DisplayPlanel.Instance.UpdateDetails(InstanceID);
         }
 
         protected override void OnMouseLeave(UIMouseEventParameter p) {
             base.OnMouseLeave(p);
             Log.Debug("AvtiveLabel.OnMouseLeave");
-            ControlPanel.Instance.DisplayDetails(null); // default
+            DisplayPlanel.Instance.UpdateDetails(null); // default
         }
 
     }
