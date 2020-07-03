@@ -25,7 +25,7 @@ namespace NetworkDetective.UI.ControlPanel {
         }
         public override void Start() {
             base.Start();
-            Log.Debug("AvtiveLabel.Start");
+            Log.Debug("InterAvtiveButton.Start");
 
             // Style the button to look like a menu
             normalBgSprite = disabledBgSprite = focusedBgSprite = "ButtonSmall";
@@ -86,12 +86,12 @@ namespace NetworkDetective.UI.ControlPanel {
                 InstanceType.NetNode => "node flags: " + InstanceID.NetNode.ToNode().m_flags,
                 InstanceType.NetSegment => "segment flags: " + InstanceID.NetNode.ToNode().m_flags,
                 InstanceType.NetLane =>
-                    "lane flags: " + InstanceID.NetNode.ToNode().m_flags + "\n" +
+                    "lane flags: " + LaneData.Flags + "\n" +
                     "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
                     "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
                     "direction: " + LaneData.LaneInfo.m_direction + "\n" +
                     "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
-                    "Is start node:" + LaneData.StartNode + "\n",
+                    "start node:" + LaneData.StartNode + "\n",
                 _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
             };
 #pragma warning enable
@@ -100,20 +100,20 @@ namespace NetworkDetective.UI.ControlPanel {
 
         protected override void OnClick(UIMouseEventParameter p) {
             base.OnClick(p);
-            Log.Debug("AvtiveLabel.OnClick");
+            Log.Debug("InterAvtiveButton.OnClick");
             if (InstanceID.Type != InstanceType.NetLane)
                 DisplayPanel.Instance.Display(this.InstanceID);
         }
 
         protected override void OnMouseEnter(UIMouseEventParameter p) {
             base.OnMouseEnter(p);
-            Log.Debug("AvtiveLabel.OnMouseEnter");
+            Log.Debug("InterAvtiveButton.OnMouseEnter");
             DisplayPanel.Instance.UpdateDetails(this);
         }
 
         protected override void OnMouseLeave(UIMouseEventParameter p) {
             base.OnMouseLeave(p);
-            Log.Debug("AvtiveLabel.OnMouseLeave");
+            Log.Debug("InterAvtiveButton.OnMouseLeave");
             DisplayPanel.Instance.UpdateDetails(DisplayPanel.Instance.Title); // default
         }
 

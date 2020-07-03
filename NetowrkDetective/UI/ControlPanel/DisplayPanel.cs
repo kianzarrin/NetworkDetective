@@ -8,6 +8,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
     // TODO node lanes !
     // TODO lane as title. ?
+    // TODO why lane flags are always 0.
     public class DisplayPanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);
@@ -96,7 +97,7 @@ namespace NetworkDetective.UI.ControlPanel {
                 Details.padding = new RectOffset(5, 5, 5, 5);
             }
 
-            Hide();
+            isVisible = false;
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -141,27 +142,21 @@ namespace NetworkDetective.UI.ControlPanel {
         void PupulateSegmentMembers(UIAutoSizePanel panel,  ushort segmentId) {
             {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
-                item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_startNode };
-                item.text = "Start node: " + item.InstanceID.NetNode;
-                InterAvtiveButtons.Add(item);
-            }
-            {
-                var item = panel.AddUIComponent<InterAvtiveButton>();
-                item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_endNode };
-                item.text = "End node: " + item.InstanceID.NetNode;
-                InterAvtiveButtons.Add(item);
-            }
-            {
-                var item = panel.AddUIComponent<InterAvtiveButton>();
-                item.InstanceID = new InstanceID { NetNode = NetUtil.GetTailNode(segmentId) };
-                item.text = "Tail node: " + item.InstanceID.NetNode;
+                ushort nodeId = segmentId.ToSegment().m_startNode;
+                item.InstanceID = new InstanceID { NetNode = nodeId };
+                bool isHeadNode = NetUtil.GetHeadNode(segmentId) == nodeId;
+                string t = isHeadNode ? "head" : "tail";
+                item.text = $"Start node: {nodeId} ({t} node) ";
                 item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
                 InterAvtiveButtons.Add(item);
             }
             {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
-                item.InstanceID = new InstanceID { NetNode = NetUtil.GetHeadNode(segmentId) };
-                item.text = "Head node: " + item.InstanceID.NetNode;
+                ushort nodeId = segmentId.ToSegment().m_endNode;
+                item.InstanceID = new InstanceID { NetNode = nodeId };
+                bool isHeadNode = NetUtil.GetHeadNode(segmentId) == nodeId;
+                string t = isHeadNode ? "head" : "tail";
+                item.text = $"End node: {nodeId} ({t} node) ";
                 item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
                 InterAvtiveButtons.Add(item);
             }
@@ -228,12 +223,14 @@ namespace NetworkDetective.UI.ControlPanel {
         public void Display(InstanceID instanceID) {
             if (isVisible && InstanceID == instanceID)
                 return;
+            Log.Debug("DisplayPanel.Display() called");
             Show();
             InstanceID = instanceID;
             RefreshSizeRecursive();
         }
 
         public void Close() {
+            Log.Debug("DisplayPanel.Close() called");
             Hide();
         }
 
