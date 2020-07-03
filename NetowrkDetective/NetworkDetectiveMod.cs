@@ -9,7 +9,7 @@ namespace NetworkDetective {
         public static Version ModVersion => typeof(NetworkDetectiveMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);
         public string Name => "Network detective" + VersionString;
-        public string Description => "use Ctrl+B to activate. " +
+        public string Description => "use Ctrl+D to activate. " +
             "gives information about segment, nodes and lanes.";
         
         public void OnEnabled() {
@@ -31,12 +31,12 @@ namespace NetworkDetective {
 
     public static class LoadTool {
         public static void Load() {
-            DisplayPlanel.Create();
-            //Tool.NetworkDetectiveTool.Create();
+            DisplayPanel.Create();
+            Tool.NetworkDetectiveTool.Create();
         }
         public static void Release() {
-            //Tool.NetworkDetectiveTool.Remove();
-            DisplayPlanel.Release();
+            Tool.NetworkDetectiveTool.Remove();
+            DisplayPanel.Release();
         }
     }
 

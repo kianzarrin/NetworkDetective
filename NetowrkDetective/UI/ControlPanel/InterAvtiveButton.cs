@@ -16,10 +16,12 @@ namespace NetworkDetective.UI.ControlPanel {
             //text = "some text\nnewline";
             //tooltip = "some tooltip";
             // Set the button dimensions.
-            width = 100;
-            height = 40;
-            // autoSize = true;
+            width = 500;
+            height = 30;
+
+            //autoSize = true;
             textPadding = new RectOffset(10, 10, 5, 5);
+            textHorizontalAlignment = UIHorizontalAlignment.Left;
         }
         public override void Start() {
             base.Start();
@@ -56,18 +58,18 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public LaneData LaneData { get; private set; } //optional. only valid for lanes.
 
-        public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
+        public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo, bool alphaBlend = false) {
             if (InstanceID.IsEmpty)
                 return;
             switch (InstanceID.Type) {
                 case InstanceType.NetLane:
-                    RenderUtil.RenderLaneOverlay(cameraInfo, LaneData, Color.blue, false);
+                    RenderUtil.RenderLaneOverlay(cameraInfo, LaneData, Color.yellow, alphaBlend);
                     break;
                 case InstanceType.NetSegment:
-                    RenderUtil.RenderSegmnetOverlay(cameraInfo, InstanceID.NetSegment, Color.blue, false);
+                    RenderUtil.RenderSegmnetOverlay(cameraInfo, InstanceID.NetSegment, Color.cyan, alphaBlend);
                     break;
                 case InstanceType.NetNode:
-                    RenderUtil.DrawNodeCircle(cameraInfo, Color.blue, InstanceID.NetNode, false);
+                    RenderUtil.DrawNodeCircle(cameraInfo, Color.blue, InstanceID.NetNode, alphaBlend);
                     break;
                 default:
                     Log.Error("Unexpected InstanceID.Type: "+ InstanceID.Type);
@@ -75,21 +77,44 @@ namespace NetworkDetective.UI.ControlPanel {
             }
         }
 
+        public string GetDetails() {
+            if (InstanceID.IsEmpty)
+                return "Please Hover/Select a network";
+#pragma warning disable
+            return InstanceID.Type switch
+            {
+                InstanceType.NetNode => "node flags: " + InstanceID.NetNode.ToNode().m_flags,
+                InstanceType.NetSegment => "segment flags: " + InstanceID.NetNode.ToNode().m_flags,
+                InstanceType.NetLane =>
+                    "lane flags: " + InstanceID.NetNode.ToNode().m_flags + "\n" +
+                    "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
+                    "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
+                    "direction: " + LaneData.LaneInfo.m_direction + "\n" +
+                    "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
+                    "Is start node:" + LaneData.StartNode + "\n",
+                _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
+            };
+#pragma warning enable
+
+        }
+
         protected override void OnClick(UIMouseEventParameter p) {
             base.OnClick(p);
             Log.Debug("AvtiveLabel.OnClick");
+            if (InstanceID.Type != InstanceType.NetLane)
+                DisplayPanel.Instance.Display(this.InstanceID);
         }
 
         protected override void OnMouseEnter(UIMouseEventParameter p) {
             base.OnMouseEnter(p);
             Log.Debug("AvtiveLabel.OnMouseEnter");
-            DisplayPlanel.Instance.UpdateDetails(InstanceID);
+            DisplayPanel.Instance.UpdateDetails(this);
         }
 
         protected override void OnMouseLeave(UIMouseEventParameter p) {
             base.OnMouseLeave(p);
             Log.Debug("AvtiveLabel.OnMouseLeave");
-            DisplayPlanel.Instance.UpdateDetails(null); // default
+            DisplayPanel.Instance.UpdateDetails(DisplayPanel.Instance.Title); // default
         }
 
     }

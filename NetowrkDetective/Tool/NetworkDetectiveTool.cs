@@ -56,7 +56,7 @@ namespace NetworkDetective.Tool {
         //public override void EnableTool() => ToolsModifierControl.SetTool<NetworkDetectiveTool>();
 
         protected override void OnEnable() {
-            DisplayPlanel.Instance?.Display(InstanceID.Empty);
+            DisplayPanel.Instance?.Display(InstanceID.Empty);
             Log.Debug("NetworkDetectiveTool.OnEnable");
             button.Focus();
             base.OnEnable();
@@ -65,7 +65,7 @@ namespace NetworkDetective.Tool {
         }
 
         protected override void OnDisable() {
-            DisplayPlanel.Instance?.Close();
+            DisplayPanel.Instance?.Close();
             Log.Debug("NetworkDetectiveTool.OnDisable");
             button?.Unfocus();
             base.OnDisable();
@@ -79,38 +79,39 @@ namespace NetworkDetective.Tool {
         }
 
         public InstanceID GetHoveredInstanceID() {
-            if (HelpersExtensions.ControlIsPressed) {
+            if (!HoverValid)
+                return InstanceID.Empty;
+            else if (HelpersExtensions.ControlIsPressed) 
                 return new InstanceID { NetNode = HoveredNodeId };
-            } else {
+            else 
                 return new InstanceID { NetSegment = HoveredSegmentId };
-            }
         }
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
             base.RenderOverlay(cameraInfo);
-            if (!HoverValid)return;
-            InstanceID instanceID = new InstanceID { NetSegment = HoveredSegmentId };
-            DisplayPlanel.Instance.Display(GetHoveredInstanceID());
-            DisplayPlanel.Instance.RenderOverlay(cameraInfo);
+            if (SelectedInstanceID.IsEmpty) {
+                DisplayPanel.Instance.Display(GetHoveredInstanceID());
+            } else {
+                DisplayPanel.Instance.Display(SelectedInstanceID);
+            }
+            DisplayPanel.Instance.RenderOverlay(cameraInfo);
         }
 
         protected override void OnPrimaryMouseClicked() {
             if (!HoverValid)
                 return;
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
-            if (HelpersExtensions.ControlIsPressed) {
-                
-            } else {
-                // segment selection mode:
-                SelectedInstanceID = GetHoveredInstanceID();
-            }
+            SelectedInstanceID = GetHoveredInstanceID();
+            DisplayPanel.Instance.Display(SelectedInstanceID);
         }
 
         protected override void OnSecondaryMouseClicked() {
-            if (SelectedInstanceID.IsEmpty)
+            if (SelectedInstanceID.IsEmpty) {
                 DisableTool();
-            else
+            } else {
                 SelectedInstanceID = InstanceID.Empty;
+                DisplayPanel.Instance.Display(InstanceID.Empty);
+            }
         }
     } //end class
 }

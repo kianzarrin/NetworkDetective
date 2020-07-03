@@ -113,7 +113,7 @@
     <Compile Include="Tool\KianToolBase.cs" />
     <Compile Include="Tool\NetworkDetectiveTool.cs" />
     <Compile Include="UI\ControlPanel\InterAvtiveButton.cs" />
-    <Compile Include="UI\ControlPanel\DisplayPlanel.cs" />
+    <Compile Include="UI\ControlPanel\DisplayPanel.cs" />
     <Compile Include="UI\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
