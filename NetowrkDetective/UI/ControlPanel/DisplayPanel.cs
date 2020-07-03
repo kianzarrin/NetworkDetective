@@ -3,13 +3,11 @@ namespace NetworkDetective.UI.ControlPanel {
     using ColossalFramework.UI;
     using KianCommons;
     using KianCommons.UI;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Reflection.Emit;
     using UnityEngine;
-    using UnityEngine.UI;
 
+    // TODO node lanes !
+    // TODO lane as title. ?
     public class DisplayPanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);
@@ -95,6 +93,7 @@ namespace NetworkDetective.UI.ControlPanel {
             {
                 var panel = AddPanel();
                 Details = panel.AddUIComponent<UILabel>();
+                Details.padding = new RectOffset(5, 5, 5, 5);
             }
 
             Hide();
@@ -129,9 +128,13 @@ namespace NetworkDetective.UI.ControlPanel {
 
             PupulatablePanel = AddPanel(ContainerOfPopulatablePanel);
             InterAvtiveButtons = new List<InterAvtiveButton>(32);
+
             if (InstanceID.Type == InstanceType.NetSegment) {
                 PupulateSegmentMembers(PupulatablePanel, InstanceID.NetSegment);
+            }else if(InstanceID.Type == InstanceType.NetNode) {
+                PupulateNodeMembers(PupulatablePanel, InstanceID.NetNode);
             }
+
             RefreshSizeRecursive();
         }
 
@@ -139,24 +142,59 @@ namespace NetworkDetective.UI.ControlPanel {
             {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
                 item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_startNode };
-                item.text = "StartNode: " + item.InstanceID.NetNode;
+                item.text = "Start node: " + item.InstanceID.NetNode;
                 InterAvtiveButtons.Add(item);
             }
             {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
                 item.InstanceID = new InstanceID { NetNode = segmentId.ToSegment().m_endNode };
-                item.text = "EndNode: " + item.InstanceID.NetNode;
+                item.text = "End node: " + item.InstanceID.NetNode;
+                InterAvtiveButtons.Add(item);
+            }
+            {
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                item.InstanceID = new InstanceID { NetNode = NetUtil.GetTailNode(segmentId) };
+                item.text = "Tail node: " + item.InstanceID.NetNode;
+                item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
+                InterAvtiveButtons.Add(item);
+            }
+            {
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                item.InstanceID = new InstanceID { NetNode = NetUtil.GetHeadNode(segmentId) };
+                item.text = "Head node: " + item.InstanceID.NetNode;
+                item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
                 InterAvtiveButtons.Add(item);
             }
 
-            AddSpacePanel(panel, 3);
+            AddSpacePanel(panel, 5);
 
-            foreach(var laneData in NetUtil.IterateLanes(segmentId)) {
+            foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
                 item.InstanceID = new InstanceID { NetLane = laneData.LaneID };
                 item.text = $"Lane[{laneData.LaneIndex}]: " + item.InstanceID.NetLane;
                 InterAvtiveButtons.Add(item);
             }
+        }
+
+        void PupulateNodeMembers(UIAutoSizePanel panel, ushort nodeId) {
+            for(int i = 0; i < 8; ++i) {
+                ushort segmentId = nodeId.ToNode().GetSegment(i);
+                if (segmentId == 0) continue;
+                bool startNode = NetUtil.IsStartNode(segmentId: segmentId, nodeId: nodeId);
+                var item = panel.AddUIComponent<InterAvtiveButton>();
+                InterAvtiveButtons.Add(item);
+                item.InstanceID = new InstanceID { NetSegment = segmentId};
+                item.text = $"Segment: {segmentId} " + (startNode ? "(start node)" : "end node");
+            }
+
+            AddSpacePanel(panel, 3);
+
+            //foreach (uint laneId in NetUtil.IterateNodeLanes(nodeId)) {
+            //    var item = panel.AddUIComponent<InterAvtiveButton>();
+            //    item.InstanceID = new InstanceID { NetLane = laneId };
+            //    item.text = $"Lane: " + laneId;
+            //    InterAvtiveButtons.Add(item);
+            //}
         }
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {

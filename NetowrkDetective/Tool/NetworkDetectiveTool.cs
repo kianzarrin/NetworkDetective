@@ -1,14 +1,12 @@
 using ColossalFramework;
 using ColossalFramework.UI;
 using KianCommons;
+using KianCommons.UI;
 using NetworkDetective.UI.ControlPanel;
 using System;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace NetworkDetective.Tool {
-    using static KianCommons.UI.RenderUtil;
-
     public sealed class NetworkDetectiveTool : KianToolBase {
         public static readonly SavedInputKey ActivationShortcut = new SavedInputKey(
             "ActivationShortcut",
@@ -93,6 +91,7 @@ namespace NetworkDetective.Tool {
                 DisplayPanel.Instance.Display(GetHoveredInstanceID());
             } else {
                 DisplayPanel.Instance.Display(SelectedInstanceID);
+                RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
             }
             DisplayPanel.Instance.RenderOverlay(cameraInfo);
         }
