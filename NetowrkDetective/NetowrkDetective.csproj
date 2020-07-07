@@ -53,9 +53,6 @@
       <HintPath>$(MangedDLLPath)\ICities.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="TrafficManager">
-      <HintPath>..\libs\TrafficManager.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(MangedDLLPath)\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -67,13 +64,6 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>$(MangedDLLPath)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="CSUtil.Commons, Version=1.0.7347.7474, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\CSUtil.Commons.dll</HintPath>
-    </Reference>
-    <Reference Include="FineRoadTool">
-      <HintPath>..\..\AutomaticRoundaboutBuilder\dependencies\FineRoadTool.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -144,10 +134,21 @@
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>set "DEPLOYDIR=$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(TargetName)\"
+    <PostBuildEvent>set "MONODIR=C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
+echo creating mdb ...
+"%25MONODIR%25bin\mono.exe" "%25MONODIR%25lib\mono\4.5\pdb2mdb.exe" "$(TargetPath)"
+
+set "DEPLOYDIR=$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(TargetName)\"
+
+xcopy /y /v "$(TargetPath).mdb" "%25DEPLOYDIR%25"
+
+
 
 del  "%25DEPLOYDIR%25$(TargetFileName)"
-xcopy /y /v "$(TargetDir)$(TargetFileName)" "%25DEPLOYDIR%25"
+
+xcopy /y /v "$(TargetPath)" "%25DEPLOYDIR%25"
+
+
 
 echo THE ASSEMBLY VERSION IS: @(VersionNumber) created at %25time%25
 set DEPLOYDIR=</PostBuildEvent>

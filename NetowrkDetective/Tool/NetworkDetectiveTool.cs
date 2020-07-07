@@ -25,6 +25,7 @@ namespace NetworkDetective.Tool {
             Log.Info("NetworkDetectiveTool.Create()");
             GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
             var tool = toolModControl.GetComponent<NetworkDetectiveTool>() ?? toolModControl.AddComponent<NetworkDetectiveTool>();
+            tool.enabled = false;
             return tool;
         }
 
