@@ -3,6 +3,7 @@ using ColossalFramework.UI;
 using KianCommons;
 using KianCommons.UI;
 using NetworkDetective.UI.ControlPanel;
+using NetworkDetective.UI.GoToPanel;
 using System;
 using UnityEngine;
 
@@ -21,6 +22,14 @@ namespace NetworkDetective.Tool {
             base.Awake();
         }
 
+        public enum ModeT {
+            Display,
+            GoTo,
+        }
+
+        public ModeT Mode;
+
+
         public static NetworkDetectiveTool Create() {
             Log.Info("NetworkDetectiveTool.Create()");
             GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
@@ -36,7 +45,7 @@ namespace NetworkDetective.Tool {
             }
         }
 
-        public InstanceID SelectedInstanceID { get; private set; }
+        public InstanceID SelectedInstanceID { get; set; }
 
         public static void Remove() {
             Log.Debug("NetworkDetectiveTool.Remove()");
@@ -65,6 +74,7 @@ namespace NetworkDetective.Tool {
 
         protected override void OnDisable() {
             DisplayPanel.Instance?.Close();
+            GoToPanel.Instance.Close();
             Log.Debug("NetworkDetectiveTool.OnDisable");
             button?.Unfocus();
             base.OnDisable();
@@ -88,6 +98,8 @@ namespace NetworkDetective.Tool {
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
             base.RenderOverlay(cameraInfo);
+            if (Mode == ModeT.GoTo)
+                return;
             if (SelectedInstanceID.IsEmpty) {
                 DisplayPanel.Instance.Display(GetHoveredInstanceID());
             } else {
@@ -98,6 +110,8 @@ namespace NetworkDetective.Tool {
         }
 
         protected override void OnPrimaryMouseClicked() {
+            if (Mode == ModeT.GoTo)
+                return;
             if (!HoverValid)
                 return;
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
@@ -106,9 +120,10 @@ namespace NetworkDetective.Tool {
         }
 
         protected override void OnSecondaryMouseClicked() {
-            if (SelectedInstanceID.IsEmpty) {
+            if (Mode == ModeT.Display && SelectedInstanceID.IsEmpty) {
                 DisableTool();
             } else {
+                GoToPanel.Instance.Hide();
                 SelectedInstanceID = InstanceID.Empty;
                 DisplayPanel.Instance.Display(InstanceID.Empty);
             }

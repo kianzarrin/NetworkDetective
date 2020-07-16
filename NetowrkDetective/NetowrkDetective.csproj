@@ -104,6 +104,9 @@
     <Compile Include="Tool\NetworkDetectiveTool.cs" />
     <Compile Include="UI\ControlPanel\InterAvtiveButton.cs" />
     <Compile Include="UI\ControlPanel\DisplayPanel.cs" />
+    <Compile Include="UI\ControlPanel\GoToButton.cs" />
+    <Compile Include="UI\GoToPanel\GoToPanel.cs" />
+    <Compile Include="UI\GoToPanel\IDTextField.cs" />
     <Compile Include="UI\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -111,13 +114,14 @@
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="KianCommons\.gitattributes" />
     <Content Include="KianCommons\.gitignore" />
     <Content Include="KianCommons\KianCommons.sln" />
+    <EmbeddedResource Include="Resources\back.png" />
+    <EmbeddedResource Include="Resources\goto.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="PostBuildMacros">
@@ -134,9 +138,9 @@
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>set "MONODIR=C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
-echo creating mdb ...
-"%25MONODIR%25bin\mono.exe" "%25MONODIR%25lib\mono\4.5\pdb2mdb.exe" "$(TargetPath)"
+    <PostBuildEvent>set "MONODIR="C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
+"%25MONODIR%25\bin\mono.exe" "%25MONODIR%25\lib\mono\4.5\pdb2mdb.exe" "$(TargetPath)"
+
 
 set "DEPLOYDIR=$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(TargetName)\"
 

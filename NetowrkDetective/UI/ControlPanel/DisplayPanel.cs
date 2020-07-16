@@ -3,8 +3,12 @@ namespace NetworkDetective.UI.ControlPanel {
     using ColossalFramework.UI;
     using KianCommons;
     using KianCommons.UI;
+    using NetworkDetective.UI.ControlPanel;
     using System.Collections.Generic;
     using UnityEngine;
+    using GoToPanel;
+    using NetworkDetective.Tool;
+
 
     // TODO node lanes !
     // TODO lane as title. ?
@@ -71,13 +75,17 @@ namespace NetworkDetective.UI.ControlPanel {
 
                 var lblCaption = dragHandle_.AddUIComponent<UILabel>();
                 lblCaption.text = "Network Detective";
-                lblCaption.relativePosition = new Vector3(65, 14, 0);
+                lblCaption.relativePosition = new Vector3(100, 14, 0);
 
                 //var sprite = dragHandle_.AddUIComponent<UISprite>();
                 //sprite.size = new Vector2(40, 40);
                 //sprite.relativePosition = new Vector3(5, 2.5f, 0);
                 //sprite.atlas = TextureUtil.GetAtlas(PedestrianBridgeButton.ATLAS_NAME);
                 //sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
+
+                var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
+                gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
+
             }
 
             AddSpacePanel(this, 10);
@@ -221,6 +229,8 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         public void Display(InstanceID instanceID) {
+            GoToPanel.Instance.Close();
+            NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
                 return;
             Log.Debug("DisplayPanel.Display() called");

@@ -7,6 +7,7 @@ using ColossalFramework.Plugins;
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using NetworkDetective.UI.GoToPanel;
 
 namespace NetworkDetective {
     public static class Test {
@@ -30,7 +31,7 @@ namespace NetworkDetective {
             "gives information about segment, node and lane instances.";
         
         public void OnEnabled() {
-            Test.Factorial(4); // TODO delete
+            //Test.Factorial(4); // TODO delete
             if (HelpersExtensions.InGame)
                 LoadTool.Load();
 #if DEBUG
@@ -50,11 +51,13 @@ namespace NetworkDetective {
     public static class LoadTool {
         public static void Load() {
             DisplayPanel.Create();
+            GoToPanel.Create();
             Tool.NetworkDetectiveTool.Create();
             //ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
         }
         public static void Release() {
             Tool.NetworkDetectiveTool.Remove();
+            GoToPanel.Release();
             DisplayPanel.Release();
         }
     }
