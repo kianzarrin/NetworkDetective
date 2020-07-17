@@ -48,6 +48,7 @@ namespace NetworkDetective.UI.GoToPanel {
 
         protected override void OnTextChanged() {
             base.OnTextChanged();
+
             if (TryGetValue(out _)) {
                 _prevText = text;
                 GoToPanel.Instance.ID = Value;

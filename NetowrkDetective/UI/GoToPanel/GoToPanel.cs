@@ -44,6 +44,8 @@ namespace NetworkDetective.UI.GoToPanel {
             isVisible = true;
         }
 
+
+        bool started_ = false;
         public override void Start() {
             base.Start();
             Log.Debug("GoToPanel started");
@@ -64,8 +66,8 @@ namespace NetworkDetective.UI.GoToPanel {
                 lblCaption.text = "Network Detective";
                 lblCaption.relativePosition = new Vector3(100, 14, 0);
 
-                var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
-                gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
+                //var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
+                //gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
             }
 
             AddSpacePanel(this, 10);
@@ -115,6 +117,7 @@ namespace NetworkDetective.UI.GoToPanel {
             isVisible = false;
             RefreshSizeRecursive();
             Invalidate();
+            started_ = true;
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -139,6 +142,8 @@ namespace NetworkDetective.UI.GoToPanel {
         }
 
         public void Open(uint id) {
+            if (!started_)
+                return;
             Log.Debug("GoToPanel.Display() called");
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.GoTo;
             DisplayPanel.Instance.Close();
@@ -169,6 +174,8 @@ namespace NetworkDetective.UI.GoToPanel {
         }
 
         void RefreshButtons() {
+            if (!started_)
+                return;
             LaneButton.isEnabled = NetUtil.IsLaneValid(ID);
             NodeButton.isEnabled = NetUtil.IsNodeValid((ushort)ID);
             SegmentButton.isEnabled = NetUtil.IsSegmentValid((ushort)ID);

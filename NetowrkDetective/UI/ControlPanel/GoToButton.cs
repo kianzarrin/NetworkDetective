@@ -24,7 +24,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public override void Awake() {
             base.Awake();
-            Log.Debug("GoToButton.Awake() is called." + Environment.StackTrace);
+            Log.Debug("GoToButton.Awake() is called.");
             name = nameof(GoToButton);
             Instace = this;
         }

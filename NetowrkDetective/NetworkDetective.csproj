@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -138,7 +138,8 @@
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>set "MONODIR="C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
+    <PostBuildEvent>set "MONODIR=C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
+echo monodir  is "%25MONODIR%25"
 "%25MONODIR%25\bin\mono.exe" "%25MONODIR%25\lib\mono\4.5\pdb2mdb.exe" "$(TargetPath)"
 
 

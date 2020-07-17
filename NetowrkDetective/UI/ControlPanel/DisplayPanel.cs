@@ -56,6 +56,7 @@ namespace NetworkDetective.UI.ControlPanel {
             isVisible = true;
         }
 
+        bool started_ = false;
         public override void Start() {
             base.Start();
             Log.Debug("ControlPanel started");
@@ -106,6 +107,7 @@ namespace NetworkDetective.UI.ControlPanel {
             }
 
             isVisible = false;
+            started_ = true;
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -229,6 +231,8 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         public void Display(InstanceID instanceID) {
+            if (!started_)
+                return;
             GoToPanel.Instance.Close();
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
