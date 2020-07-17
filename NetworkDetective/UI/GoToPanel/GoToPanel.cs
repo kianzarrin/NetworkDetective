@@ -5,6 +5,7 @@ namespace NetworkDetective.UI.GoToPanel {
     using KianCommons.UI;
     using NetworkDetective.Tool;
     using NetworkDetective.UI.ControlPanel;
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
@@ -23,6 +24,8 @@ namespace NetworkDetective.UI.GoToPanel {
             Destroy(Instance);
         }
 
+        #endregion Instanciation
+
         UIButton NodeButton;
         UIButton SegmentButton;
         UIButton LaneButton;
@@ -36,12 +39,10 @@ namespace NetworkDetective.UI.GoToPanel {
             get => _ID;
         }
 
-        #endregion Instanciation
 
         public override void Awake() {
             base.Awake();
             Instance = this;
-            isVisible = true;
         }
 
 
@@ -63,8 +64,8 @@ namespace NetworkDetective.UI.GoToPanel {
                 dragHandle_.target = parent;
 
                 var lblCaption = dragHandle_.AddUIComponent<UILabel>();
-                lblCaption.text = "Network Detective";
-                lblCaption.relativePosition = new Vector3(100, 14, 0);
+                lblCaption.text = "Go To";
+                lblCaption.relativePosition = new Vector3(14, 14, 0);
 
                 //var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
                 //gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
@@ -84,23 +85,28 @@ namespace NetworkDetective.UI.GoToPanel {
                 NodeButton = panel.AddUIComponent<UIButtonExt>();
                 NodeButton.text = "Node";
                 NodeButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
-                    NetworkDetectiveTool.Instance.SelectedInstanceID = new InstanceID { NetNode = (ushort)ID };
-                    DisplayPanel.Instance.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
+                    InstanceID id = new InstanceID { NetNode = (ushort)ID };
+                    NetworkDetectiveTool.Instance.SelectedInstanceID = id;
+                    DisplayPanel.Instance.Display(id);
+                    GoToInstance(id);
                 };
                 SegmentButton = panel.AddUIComponent<UIButtonExt>();
                 SegmentButton.text = "Segment";
                 SegmentButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
-                    NetworkDetectiveTool.Instance.SelectedInstanceID = new InstanceID { NetSegment = (ushort)ID };
-                    DisplayPanel.Instance.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
+                    InstanceID id = new InstanceID { NetSegment = (ushort)ID };
+                    NetworkDetectiveTool.Instance.SelectedInstanceID = id;
+                    DisplayPanel.Instance.Display(id);
+                    GoToInstance(id);
                 };
                 LaneButton = panel.AddUIComponent<UIButtonExt>();
                 LaneButton.text = "Lane";
                 LaneButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
-                    NetworkDetectiveTool.Instance.SelectedInstanceID = new InstanceID { NetLane = (ushort)ID };
-                    DisplayPanel.Instance.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
+                    ushort segmentId = ID.ToLane().m_segment;
+                    InstanceID id = new InstanceID { NetSegment = segmentId };
+                    NetworkDetectiveTool.Instance.SelectedInstanceID = id;
+                    DisplayPanel.Instance.Display(id);
+                    GoToInstance(id);
                 };
-
-
             }
 
             AddSpacePanel(this, 10);
@@ -171,6 +177,16 @@ namespace NetworkDetective.UI.GoToPanel {
             DisplayPanel.SavedX.value = absolutePosition.x;
             DisplayPanel.SavedY.value = absolutePosition.y;
             Log.Debug("absolutePosition: " + absolutePosition);
+        }
+
+        public static void GoToInstance(InstanceID instanceID) {
+            Vector3 pos = instanceID.Type switch{
+                InstanceType.NetNode => instanceID.NetNode.ToNode().m_position,
+                InstanceType.NetSegment => instanceID.NetSegment.ToSegment().m_middlePosition,
+                _ => throw new NotImplementedException("instanceID.Type:"+ instanceID.Type),
+            };
+            pos.y = Camera.main.transform.position.y;
+            ToolsModifierControl.cameraController.SetTarget(instanceID, pos, true);
         }
 
         void RefreshButtons() {

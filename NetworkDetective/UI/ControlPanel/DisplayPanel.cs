@@ -53,7 +53,6 @@ namespace NetworkDetective.UI.ControlPanel {
         public override void Awake() {
             base.Awake();
             Instance = this;
-            isVisible = true;
         }
 
         bool started_ = false;
@@ -85,7 +84,7 @@ namespace NetworkDetective.UI.ControlPanel {
                 //sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
 
                 var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
-                gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
+                gotoBtn.relativePosition = new Vector2(width - 40 - 40, 3f);
 
             }
 
@@ -104,6 +103,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 var panel = AddPanel();
                 Details = panel.AddUIComponent<UILabel>();
                 Details.padding = new RectOffset(5, 5, 5, 5);
+                Details.minimumSize = new Vector2(width, 0);
+                Details.wordWrap = true;
             }
 
             isVisible = false;

@@ -28,28 +28,34 @@ namespace NetworkDetective.UI.GoToPanel {
             useDropShadow = true;
             text = "0";
             name = nameof(IDTextField);
-            tooltip = "enter id to go to";
+            tooltip = "enter network id to go to";
         }
 
         public override void Start() {
             base.Start();
+            width = parent.width;
+            Invalidate();
         }
 
         public bool TryGetValue(out uint value) {
+            if (text == "") {
+                value = 0;
+                return true;
+            }
             return uint.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out value);
         }
 
         public uint Value {
             set => text = value.ToString();
-            get => uint.Parse(text, CultureInfo.InvariantCulture.NumberFormat);
+            get => text == "" ? 0 : uint.Parse(text, CultureInfo.InvariantCulture.NumberFormat);
         }
 
         private string _prevText = "0";
 
         protected override void OnTextChanged() {
             base.OnTextChanged();
-
             if (TryGetValue(out _)) {
+                // Value = Value;
                 _prevText = text;
                 GoToPanel.Instance.ID = Value;
             } else {
