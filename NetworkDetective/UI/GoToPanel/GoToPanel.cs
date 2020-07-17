@@ -160,7 +160,7 @@ namespace NetworkDetective.UI.GoToPanel {
         }
 
         public void Close() {
-            Log.Debug("GoToPanel.Close() called");
+            //Log.Debug("GoToPanel.Close() called");
             Hide();
         }
 

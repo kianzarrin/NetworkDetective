@@ -177,7 +177,9 @@ namespace NetworkDetective.UI.ControlPanel {
             foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
                 item.InstanceID = new InstanceID { NetLane = laneData.LaneID };
-                item.text = $"Lane[{laneData.LaneIndex}]: " + item.InstanceID.NetLane;
+                item.text = $"Lane[{Title.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
+                if(ModSettings.InLineLaneInfo)
+                    item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
                 InterAvtiveButtons.Add(item);
             }
         }
@@ -221,7 +223,7 @@ namespace NetworkDetective.UI.ControlPanel {
             {
                 InstanceType.NetNode => "Node: " + InstanceID.NetNode,
                 InstanceType.NetSegment => "Segment: " + InstanceID.NetSegment,
-                InstanceType.NetLane => $"Lane[{Title.LaneData.LaneIndex}]: " + InstanceID.NetLane,
+                InstanceType.NetLane => $"Lane[{Title.LaneData.LaneIndex}]: {InstanceID.NetLane}",
                 _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
             };
         }

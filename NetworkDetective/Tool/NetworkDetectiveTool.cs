@@ -84,7 +84,10 @@ namespace NetworkDetective.Tool {
 
         protected override void OnToolUpdate() {
             base.OnToolUpdate();
-            ToolCursor = HoverValid ? NetUtil.netTool.m_upgradeCursor : null;
+            if (Mode == ModeT.Display && HoverValid)
+                ToolCursor = NetUtil.netTool.m_upgradeCursor;
+            else
+                ToolCursor = null;
         }
 
         public InstanceID GetHoveredInstanceID() {
