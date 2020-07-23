@@ -22,7 +22,6 @@ namespace NetworkDetective {
         }
     }
 
-
     public class NetworkDetectiveMod : IUserMod {
         public static Version ModVersion => typeof(NetworkDetectiveMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);
@@ -53,7 +52,7 @@ namespace NetworkDetective {
             DisplayPanel.Create();
             GoToPanel.Create();
             Tool.NetworkDetectiveTool.Create();
-            //ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
+            ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
         }
         public static void Release() {
             Tool.NetworkDetectiveTool.Remove();
@@ -65,8 +64,6 @@ namespace NetworkDetective {
     public class LoadingExtention : LoadingExtensionBase {
         public override void OnLevelLoaded(LoadMode mode) {
             switch (mode) {
-                case LoadMode.NewAsset:
-                case LoadMode.LoadAsset:
                 case LoadMode.NewTheme:
                 case LoadMode.LoadTheme:
                     return; // unsupported modes.

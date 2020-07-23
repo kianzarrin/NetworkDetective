@@ -66,20 +66,14 @@ namespace NetworkDetective.Tool {
         protected override void OnEnable() {
             DisplayPanel.Instance?.Display(InstanceID.Empty);
             Log.Debug("NetworkDetectiveTool.OnEnable");
-            button.Focus();
             base.OnEnable();
-            button.Focus();
-            button.Invalidate();
         }
 
         protected override void OnDisable() {
             DisplayPanel.Instance?.Close();
             GoToPanel.Instance.Close();
             Log.Debug("NetworkDetectiveTool.OnDisable");
-            button?.Unfocus();
             base.OnDisable();
-            button?.Unfocus();
-            button?.Invalidate();
         }
 
         protected override void OnToolUpdate() {
