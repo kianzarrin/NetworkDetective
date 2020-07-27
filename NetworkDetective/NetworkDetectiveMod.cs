@@ -31,8 +31,11 @@ namespace NetworkDetective {
         
         public void OnEnabled() {
             //Test.Factorial(4); // TODO delete
-            if (HelpersExtensions.InGame)
-                LoadTool.Load();
+            try {
+                if (HelpersExtensions.currentMode != AppMode.ThemeEditor)
+                    LoadTool.Load(); // hot reload
+            } catch { // we are in intro screen.
+            } 
 #if DEBUG
             TestsExperiments.Run();
 #endif

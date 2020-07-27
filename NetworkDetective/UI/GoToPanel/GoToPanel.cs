@@ -82,6 +82,7 @@ namespace NetworkDetective.UI.GoToPanel {
 
             {
                 var panel = AddPanel();
+                var inGameAtlas = TextureUtil.GetAtlas("Ingame");
                 NodeButton = panel.AddUIComponent<UIButtonExt>();
                 NodeButton.text = "Node";
                 NodeButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
@@ -90,6 +91,7 @@ namespace NetworkDetective.UI.GoToPanel {
                     DisplayPanel.Instance.Display(id);
                     GoToInstance(id);
                 };
+                NodeButton.atlas = inGameAtlas;
                 SegmentButton = panel.AddUIComponent<UIButtonExt>();
                 SegmentButton.text = "Segment";
                 SegmentButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
@@ -98,6 +100,7 @@ namespace NetworkDetective.UI.GoToPanel {
                     DisplayPanel.Instance.Display(id);
                     GoToInstance(id);
                 };
+                SegmentButton.atlas = inGameAtlas;
                 LaneButton = panel.AddUIComponent<UIButtonExt>();
                 LaneButton.text = "Lane";
                 LaneButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
@@ -107,6 +110,7 @@ namespace NetworkDetective.UI.GoToPanel {
                     DisplayPanel.Instance.Display(id);
                     GoToInstance(id);
                 };
+                LaneButton.atlas = inGameAtlas;
             }
 
             AddSpacePanel(this, 10);

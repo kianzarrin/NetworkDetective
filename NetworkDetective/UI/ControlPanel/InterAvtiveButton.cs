@@ -28,6 +28,7 @@ namespace NetworkDetective.UI.ControlPanel {
             Log.Debug("InterAvtiveButton.Start");
 
             // Style the button to look like a menu
+            atlas = TextureUtil.GetAtlas("Ingame");
             normalBgSprite = disabledBgSprite = focusedBgSprite = "ButtonSmall";
             hoveredBgSprite = "ButtonSmallHovered";
             pressedBgSprite = "ButtonSmallPressed";
