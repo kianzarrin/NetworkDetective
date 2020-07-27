@@ -12,7 +12,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
     // TODO node lanes !
     // TODO lane as title. ?
-    // TODO why lane flags are always 0.
+    // TODO why segment flags are always 0.
     public class DisplayPanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);
@@ -83,9 +83,11 @@ namespace NetworkDetective.UI.ControlPanel {
                 //sprite.atlas = TextureUtil.GetAtlas(PedestrianBridgeButton.ATLAS_NAME);
                 //sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
 
-                var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
-                gotoBtn.relativePosition = new Vector2(width - 40 - 40, 3f);
+                var closeBtn = dragHandle_.AddUIComponent<CloseButton>();
+                closeBtn.relativePosition = new Vector2(width - 40 , 3f);
 
+                var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
+                gotoBtn.relativePosition = new Vector2(width - 80, 3f);
             }
 
             AddSpacePanel(this, 10);

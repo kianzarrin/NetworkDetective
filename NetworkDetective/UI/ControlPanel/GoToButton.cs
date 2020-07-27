@@ -13,7 +13,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public static string AtlasName = "GoToButtonUI_rev" +
             typeof(GoToButton).Assembly.GetName().Version.Revision;
-        const int SIZE = 31;
+        const int SIZE = 40;
         const string CONTAINING_PANEL_NAME = "RoadsOptionPanel";
         readonly static Vector2 RELATIVE_POSITION = new Vector2(94, 38);
 
@@ -26,6 +26,7 @@ namespace NetworkDetective.UI.ControlPanel {
             base.Awake();
             Log.Debug("GoToButton.Awake() is called.");
             name = nameof(GoToButton);
+            size = new Vector2(SIZE, SIZE);
             Instace = this;
         }
 
@@ -57,7 +58,6 @@ namespace NetworkDetective.UI.ControlPanel {
             normalBgSprite = focusedBgSprite = disabledBgSprite = GoToButtonBg;
             normalFgSprite = focusedFgSprite = disabledFgSprite = hoveredFgSprite = pressedFgSprite = GotoIcon;
 
-            size = new Vector2(SIZE, SIZE);
             Show();
             Unfocus();
             Invalidate();
@@ -66,6 +66,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
         protected override void OnClick(UIMouseEventParameter p) {
             Log.Debug("ON CLICK CALLED");
+            base.OnClick(p);
             GoToPanel.GoToPanel.Instance.Open(0);
 
         }

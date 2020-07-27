@@ -67,8 +67,8 @@ namespace NetworkDetective.UI.GoToPanel {
                 lblCaption.text = "Go To";
                 lblCaption.relativePosition = new Vector3(14, 14, 0);
 
-                //var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
-                //gotoBtn.relativePosition = new Vector2(width - 40 - 40, 2.5f);
+                var backBtn = dragHandle_.AddUIComponent<BackButton>();
+                backBtn.relativePosition = new Vector2(width - 40, 3f);
             }
 
             AddSpacePanel(this, 10);

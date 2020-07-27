@@ -102,9 +102,11 @@
     <Compile Include="ThreadingExtension.cs" />
     <Compile Include="Tool\KianToolBase.cs" />
     <Compile Include="Tool\NetworkDetectiveTool.cs" />
+    <Compile Include="UI\ControlPanel\CloseButton.cs" />
     <Compile Include="UI\ControlPanel\InterAvtiveButton.cs" />
     <Compile Include="UI\ControlPanel\DisplayPanel.cs" />
     <Compile Include="UI\ControlPanel\GoToButton.cs" />
+    <Compile Include="UI\GoToPanel\BackButton.cs" />
     <Compile Include="UI\GoToPanel\GoToPanel.cs" />
     <Compile Include="UI\GoToPanel\IDTextField.cs" />
     <Compile Include="UI\Settings.cs" />
@@ -120,6 +122,8 @@
     <Content Include="KianCommons\.gitattributes" />
     <Content Include="KianCommons\.gitignore" />
     <Content Include="KianCommons\KianCommons.sln" />
+    <EmbeddedResource Include="Resources\back.png" />
+    <EmbeddedResource Include="Resources\close.png" />
     <EmbeddedResource Include="Resources\goto.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
