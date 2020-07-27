@@ -84,7 +84,7 @@ namespace NetworkDetective.UI.ControlPanel {
             return InstanceID.Type switch
             {
                 InstanceType.NetNode => "node flags: " + InstanceID.NetNode.ToNode().m_flags,
-                InstanceType.NetSegment => "segment flags: " + InstanceID.NetNode.ToNode().m_flags,
+                InstanceType.NetSegment => "segment flags: " + InstanceID.NetSegment.ToSegment().m_flags,
                 InstanceType.NetLane =>
                     "lane flags: " + LaneData.Flags + "\n" +
                     "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
