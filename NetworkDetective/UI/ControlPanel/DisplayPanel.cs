@@ -179,7 +179,7 @@ namespace NetworkDetective.UI.ControlPanel {
             foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
                 item.InstanceID = new InstanceID { NetLane = laneData.LaneID };
-                item.text = $"Lane[{Title.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
+                item.text = $"Lane[{item.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
                 if(ModSettings.InLineLaneInfo)
                     item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
                 InterAvtiveButtons.Add(item);
