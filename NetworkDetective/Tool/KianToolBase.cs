@@ -1,16 +1,13 @@
-using ColossalFramework;
 using ColossalFramework.UI;
 using UnityEngine;
 using System;
 
-using static KianCommons.HelpersExtensions;
 using KianCommons;
-using ColossalFramework.Math;
 
 namespace NetworkDetective.Tool {
     public abstract class KianToolBase : DefaultTool
     {
-        public bool ToolEnabled => ToolsModifierControl.toolController?.CurrentTool == this;
+        public bool ToolEnabled => enabled;
 
         protected override void OnDestroy() {
             DisableTool();
@@ -23,25 +20,18 @@ namespace NetworkDetective.Tool {
         public void ToggleTool()
         {
             Log.Debug("ToggleTool: called");
-            if (!ToolEnabled)
-                EnableTool();
-            else
-                DisableTool();
+            enabled = !enabled;
         }
 
         public void EnableTool()
         {
-            Log.Debug("EnableTool: called");
-            //WorldInfoPanel.HideAllWorldInfoPanels();
-            //GameAreaInfoPanel.Hide();
-            ToolsModifierControl.toolController.CurrentTool = this;
+            enabled = true;
         }
 
         public void DisableTool()
         {
             Log.Debug("DisableTool: called");
-            if(ToolsModifierControl.toolController?.CurrentTool == this)
-                ToolsModifierControl.SetTool<DefaultTool>();
+            enabled = false;
         }
 
         protected override void OnToolUpdate()
@@ -72,18 +62,11 @@ namespace NetworkDetective.Tool {
             HoveredNodeId = 0;
             HitPos = Vector3.zero;
             if (!IsMouseRayValid)
-            {
                 return false;
-            }
 
             // find currently hovered node
-            RaycastInput nodeInput = new RaycastInput(m_mouseRay, m_mouseRayLength)
-            {
-                m_netService = {
-                        // find road segments
-                        m_itemLayers = ItemClass.Layer.Default | ItemClass.Layer.MetroTunnels,
-                        m_service = ItemClass.Service.Road
-                    },
+            RaycastInput nodeInput = new RaycastInput(m_mouseRay, m_mouseRayLength) {
+                m_netService = GetService(),
                 m_ignoreTerrain = true,
                 m_ignoreNodeFlags = NetNode.Flags.None
             };
@@ -102,13 +85,8 @@ namespace NetworkDetective.Tool {
             }
 
             // find currently hovered segment
-            var segmentInput = new RaycastInput(m_mouseRay, m_mouseRayLength)
-            {
-                m_netService = {
-                    // find road segments
-                    m_itemLayers = ItemClass.Layer.Default | ItemClass.Layer.MetroTunnels,
-                    m_service = ItemClass.Service.Road
-                },
+            var segmentInput = new RaycastInput(m_mouseRay, m_mouseRayLength) {
+                m_netService = GetService(),
                 m_ignoreTerrain = true,
                 m_ignoreSegmentFlags = NetSegment.Flags.None
             };
@@ -118,7 +96,6 @@ namespace NetworkDetective.Tool {
                 HoveredSegmentId = segmentOutput.m_netSegment;
                 HitPos = segmentOutput.m_hitPos;
             }
-
 
             if (HoveredNodeId <= 0 && HoveredSegmentId > 0)
             {
