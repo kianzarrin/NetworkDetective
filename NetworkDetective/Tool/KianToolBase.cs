@@ -31,8 +31,15 @@ namespace NetworkDetective.Tool {
         public void DisableTool()
         {
             Log.Debug("DisableTool: called");
+
             enabled = false;
         }
+
+        protected override void OnDisable() {
+            base.OnDisable();
+            ToolsModifierControl.SetTool<DefaultTool>();
+        }
+
 
         protected override void OnToolUpdate()
         {

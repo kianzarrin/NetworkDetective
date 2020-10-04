@@ -95,6 +95,8 @@ namespace NetworkDetective.Tool {
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
             base.RenderOverlay(cameraInfo);
+            if (!enabled)
+                return;
             if (Mode == ModeT.GoTo)
                 return;
             if (SelectedInstanceID.IsEmpty) {

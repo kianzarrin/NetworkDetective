@@ -8,6 +8,7 @@ namespace NetworkDetective.UI.ControlPanel {
     using UnityEngine;
     using GoToPanel;
     using NetworkDetective.Tool;
+    using static System.Environment;
 
 
     // TODO node lanes !
@@ -242,7 +243,7 @@ namespace NetworkDetective.UI.ControlPanel {
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
                 return;
-            Log.Debug("DisplayPanel.Display() called");
+            Log.Debug("DisplayPanel.Display() called ");
             Show();
             InstanceID = instanceID;
             RefreshSizeRecursive();

@@ -1,11 +1,6 @@
 using ColossalFramework.UI;
 using KianCommons;
 using KianCommons.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
@@ -25,7 +20,7 @@ namespace NetworkDetective.UI.ControlPanel {
         }
         public override void Start() {
             base.Start();
-            Log.Debug("InterAvtiveButton.Start");
+            //Log.Debug("InterAvtiveButton.Start");
 
             // Style the button to look like a menu
             atlas = TextureUtil.GetAtlas("Ingame");
@@ -108,13 +103,13 @@ namespace NetworkDetective.UI.ControlPanel {
 
         protected override void OnMouseEnter(UIMouseEventParameter p) {
             base.OnMouseEnter(p);
-            Log.Debug("InterAvtiveButton.OnMouseEnter");
+            //Log.Debug("InterAvtiveButton.OnMouseEnter");
             DisplayPanel.Instance.UpdateDetails(this);
         }
 
         protected override void OnMouseLeave(UIMouseEventParameter p) {
             base.OnMouseLeave(p);
-            Log.Debug("InterAvtiveButton.OnMouseLeave");
+            //Log.Debug("InterAvtiveButton.OnMouseLeave");
             DisplayPanel.Instance.UpdateDetails(DisplayPanel.Instance.Title); // default
         }
 
