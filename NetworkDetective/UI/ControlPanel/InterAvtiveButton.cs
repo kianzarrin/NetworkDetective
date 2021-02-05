@@ -1,6 +1,7 @@
 using ColossalFramework.UI;
 using KianCommons;
 using KianCommons.UI;
+using NetworkDetective.Util;
 using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
@@ -68,7 +69,7 @@ namespace NetworkDetective.UI.ControlPanel {
                     RenderUtil.DrawNodeCircle(cameraInfo, Color.blue, InstanceID.NetNode, alphaBlend);
                     break;
                 default:
-                    Log.Error("Unexpected InstanceID.Type: "+ InstanceID.Type);
+                    Log.Error("Unexpected InstanceID.Type: " + InstanceID.Type);
                     return;
             }
         }
@@ -77,12 +78,13 @@ namespace NetworkDetective.UI.ControlPanel {
             if (InstanceID.IsEmpty)
                 return "Please Hover/Select a network";
 #pragma warning disable
-            return InstanceID.Type switch
-            {
-                InstanceType.NetNode => "node flags: " + InstanceID.NetNode.ToNode().m_flags,
-                InstanceType.NetSegment => "segment flags: " + InstanceID.NetSegment.ToSegment().m_flags,
+            return InstanceID.Type switch {
+                InstanceType.NetNode =>
+                    "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode),
+                InstanceType.NetSegment =>
+                    "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment),
                 InstanceType.NetLane =>
-                    "lane flags: " + LaneData.Flags + "\n" +
+                    "lane flags: " + FlagsUtil.GetLaneFlags(LaneData.LaneID) + "\n" +
                     "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
                     "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
                     "direction: " + LaneData.LaneInfo.m_direction + "\n" +
@@ -91,8 +93,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
             };
 #pragma warning enable
-
         }
+
 
         protected override void OnClick(UIMouseEventParameter p) {
             base.OnClick(p);
