@@ -12,7 +12,7 @@ namespace NetworkDetective {
                 bool flag = tool == null || tool is NetworkDetectiveTool ||
                     tool.GetType() == typeof(DefaultTool) || tool is NetTool || tool is BuildingTool;
                 if (flag && NetworkDetectiveTool.ActivationShortcut.IsKeyUp()) {
-                    NetworkDetectiveTool.Instance.ToggleTool();
+                            NetworkDetectiveTool.Instance.ToggleTool();
                 }
             } catch (Exception ex) {
                 Log.Exception(ex);
