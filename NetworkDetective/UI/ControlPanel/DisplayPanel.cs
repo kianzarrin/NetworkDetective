@@ -117,11 +117,11 @@ namespace NetworkDetective.UI.ControlPanel {
         UIAutoSizePanel AddPanel() => AddPanel(this);
 
         static UIAutoSizePanel AddPanel(UIPanel panel) {
-            HelpersExtensions.AssertNotNull(panel, "panel");
+            Assertion.AssertNotNull(panel, "panel");
             int pad_horizontal = 0;
             int pad_vertical = 0;
             UIAutoSizePanel newPanel = panel.AddUIComponent<UIAutoSizePanel>();
-            HelpersExtensions.AssertNotNull(newPanel, "newPanel");
+            Assertion.AssertNotNull(newPanel, "newPanel");
             newPanel.width = panel.width - pad_horizontal * 2;
             newPanel.autoLayoutPadding =
                 new RectOffset(pad_horizontal, pad_horizontal, pad_vertical, pad_vertical);

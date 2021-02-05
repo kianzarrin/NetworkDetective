@@ -74,13 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KianCommons\KianCommons\Math\BezierUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\ControlPoint2.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\ControlPoint3.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\CubicBezier3.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\LineUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Math\MathUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Math\VecetorUtils.cs" />
-    <None Include="KianCommons\KianCommons\Patches\TranspilerUtils.cs" />
     <Compile Include="KianCommons\KianCommons\Math\Vector2D.cs" />
     <Compile Include="KianCommons\KianCommons\Math\Vector3D.cs" />
     <Compile Include="KianCommons\KianCommons\UI\Helpers\UIAutoSizePanel.cs" />
@@ -92,11 +87,16 @@
     <Compile Include="KianCommons\KianCommons\UI\UIKeymappingsPanel.cs" />
     <Compile Include="KianCommons\KianCommons\UI\UIToolButton.cs" />
     <Compile Include="KianCommons\KianCommons\UI\UIUtils.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\Assertion.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\EnumBitMaskExtensions.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\EnumerationExtensions.cs" />
     <Compile Include="KianCommons\KianCommons\Util\GridUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Util\HelpersExtensions.cs" />
     <Compile Include="KianCommons\KianCommons\Util\Log.cs" />
     <Compile Include="KianCommons\KianCommons\Util\NetUtil.cs" />
     <Compile Include="KianCommons\KianCommons\Util\PluginUtil.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\ReflectionHelpers.cs" />
+    <Compile Include="KianCommons\KianCommons\Util\StringExtensions.cs" />
     <Compile Include="NetworkDetectiveMod.cs" />
     <Compile Include="TestsExperiments.cs" />
     <Compile Include="ThreadingExtension.cs" />
