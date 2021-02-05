@@ -29,4 +29,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.*")] // faster and better Lwrapper travel.
+[assembly: AssemblyVersion("1.0.1.*")] // faster and better Lwrapper travel.

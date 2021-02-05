@@ -94,18 +94,22 @@ namespace NetworkDetective.Tool {
         }
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
-            base.RenderOverlay(cameraInfo);
-            if (!enabled)
-                return;
-            if (Mode == ModeT.GoTo)
-                return;
-            if (SelectedInstanceID.IsEmpty) {
-                DisplayPanel.Instance.Display(GetHoveredInstanceID());
-            } else {
-                DisplayPanel.Instance.Display(SelectedInstanceID);
-                RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
+            try {
+                base.RenderOverlay(cameraInfo);
+                if (!enabled)
+                    return;
+                if (Mode == ModeT.GoTo)
+                    return;
+                if (!SelectedInstanceID.IsValid()) {
+                    DisplayPanel.Instance.Display(GetHoveredInstanceID());
+                } else {
+                    DisplayPanel.Instance.Display(SelectedInstanceID);
+                    RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
+                }
+                DisplayPanel.Instance.RenderOverlay(cameraInfo);
+            } catch(Exception ex) {
+                Log.Exception(ex);
             }
-            DisplayPanel.Instance.RenderOverlay(cameraInfo);
         }
 
         protected override void OnPrimaryMouseClicked() {

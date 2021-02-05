@@ -55,7 +55,7 @@ namespace NetworkDetective.UI.ControlPanel {
         public LaneData LaneData { get; private set; } //optional. only valid for lanes.
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo, bool alphaBlend = false) {
-            if (InstanceID.IsEmpty)
+            if (!InstanceID.IsValid())
                 return;
             switch (InstanceID.Type) {
                 case InstanceType.NetLane:
