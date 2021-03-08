@@ -87,7 +87,9 @@ namespace NetworkDetective.UI.ControlPanel {
                 case InstanceType.NetNode:
                     return "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
                 case InstanceType.NetSegment:
-                    return "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment);
+                    return
+                        "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment) + "\n" +
+                        "prefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();           
                 case InstanceType.NetLane:
                     try {
                         return
