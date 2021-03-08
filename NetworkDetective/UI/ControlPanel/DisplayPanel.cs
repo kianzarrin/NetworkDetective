@@ -184,7 +184,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 if(laneData.SegmentID == segmentId)
                     item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
                 else {
-                    item.text += "error: segmentID mismatch: " + laneData;
+                    item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
+                    Log.Error(item.text);
                 }
                 InterAvtiveButtons.Add(item);
             }
