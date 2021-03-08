@@ -1,173 +1,145 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3818BA07-D208-4D16-B078-DFA47D4B8BFA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetworkDetective</RootNamespace>
-    <AssemblyName>NetworkDetective</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <LangVersion>8.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net35</TargetFramework>
     <Deterministic>false</Deterministic>
+    <Deterministic>false</Deterministic>
+    <AssemblyVersion>1.0.2.*</AssemblyVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     <PathMap>$(MSBuildProjectDirectory)\=$(ProjectName)\</PathMap>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Configurations>Debug;Release;Workshop</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Workshop|AnyCPU' ">
+    <ContentID>2152013104</ContentID>
+    <DefineConstants />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <MangedDLLPath>..\dependencies</MangedDLLPath>
+    <ManagedDLLPath>../dependencies</ManagedDLLPath>
     <SteamPath>~/Library/Application Support/Steam/</SteamPath>
-    <SteamPath Condition="! Exists ('$(SteamPath)')">$(ProgramFiles)\Steam</SteamPath>
+    <SteamPath Condition="! Exists ('$(SteamPath)')">$(ProgramFiles)/Steam</SteamPath>
     <SteamPath Condition="! Exists ('$(SteamPath)')">$(Registry:HKEY_CURRENT_USER\Software\Valve\Steam@SteamPath)</SteamPath>
-    <CSPath>$(SteamPath)\steamapps\common\Cities_Skylines</CSPath>
-    <MangedDLLPath Condition="!  Exists ('$(MangedDLLPath)')">$(CSPath)\Cities_Data\Managed</MangedDLLPath>
+    <CSPath>$(SteamPath)/steamapps/common/Cities_Skylines</CSPath>
+    <ContentPath>$(SteamPath)/steamapps/workshop/content/255710/$(ContentID)</ContentPath>
+    <ManagedDLLPath Condition="!  Exists ('$(ManagedDLLPath)')">$(CSPath)/Cities_Data/Managed</ManagedDLLPath>
+    <AssemblySearchPaths>
+      $(AssemblySearchPaths);
+      $(ManagedDLLPath);
+      $(CitiesSkylinesBinaries);
+      ../libs/
+    </AssemblySearchPaths>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(MangedDLLPath)\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ColossalManaged">
-      <HintPath>$(MangedDLLPath)\ColossalManaged.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ICities">
-      <HintPath>$(MangedDLLPath)\ICities.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(MangedDLLPath)\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>$(MangedDLLPath)\UnityEngine.Networking.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(MangedDLLPath)\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="CitiesHarmony.API" Version="2.0.0" />
+    <PackageReference Include="Mono.Unofficial.pdb2mdb" Version="4.2.3.4" />
+    <PackageReference Include="GitInfo" Version="2.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="ColossalManaged" />
+    <Reference Include="ICities" />
+    <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine.UI" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\BezierUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\MathUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\VecetorUtils.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\Vector2D.cs" />
-    <Compile Include="KianCommons\KianCommons\Math\Vector3D.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\Helpers\UIAutoSizePanel.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\Helpers\UIButtonExt.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\Helpers\UICheckBoxExt.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\Helpers\UISliderExt.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\RenderUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\TextureUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\UIKeymappingsPanel.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\UIToolButton.cs" />
-    <Compile Include="KianCommons\KianCommons\UI\UIUtils.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\Assertion.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\EnumBitMaskExtensions.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\EnumerationExtensions.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\GridUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\HelpersExtensions.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\Log.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\NetUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Plugins\PluginUtil.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\ReflectionHelpers.cs" />
-    <Compile Include="KianCommons\KianCommons\Util\StringExtensions.cs" />
-    <Compile Include="NetworkDetectiveMod.cs" />
-    <Compile Include="TestsExperiments.cs" />
-    <Compile Include="ThreadingExtension.cs" />
-    <Compile Include="Tool\KianToolBase.cs" />
-    <Compile Include="Tool\NetworkDetectiveTool.cs" />
-    <Compile Include="UI\ControlPanel\CloseButton.cs" />
-    <Compile Include="UI\ControlPanel\InterAvtiveButton.cs" />
-    <Compile Include="UI\ControlPanel\DisplayPanel.cs" />
-    <Compile Include="UI\ControlPanel\GoToButton.cs" />
-    <Compile Include="UI\GoToPanel\BackButton.cs" />
-    <Compile Include="UI\GoToPanel\GoToPanel.cs" />
-    <Compile Include="UI\GoToPanel\IDTextField.cs" />
-    <Compile Include="UI\Settings.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="KianCommons\KianCommons\Plugins\AdaptiveRoadsUtil.cs" />
-    <Compile Include="Util\FlagsUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".editorconfig" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\back.png" />
     <EmbeddedResource Include="Resources\close.png" />
     <EmbeddedResource Include="Resources\goto.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="PostBuildMacros">
-    <!-- Code from https://superuser.com/questions/82231/how-do-i-do-comments-at-a-windows-command-prompt -->
+  <ItemGroup>
+    <Compile Remove="KianCommons\libs\**" />
+    <EmbeddedResource Remove="KianCommons\libs\**" />
+    <None Remove="KianCommons\libs\**" />
+    <Compile Remove="KianCommons\KianCommons\Math\ControlPoint2.cs" />
+    <Compile Remove="KianCommons\KianCommons\Math\ControlPoint3.cs" />
+    <Compile Remove="KianCommons\KianCommons\Math\CubicBezier3.cs" />
+    <Compile Remove="KianCommons\KianCommons\Math\LineUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Int32Converter.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJData.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJFace.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJFaceVertex.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJGroup.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJLoader.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\OBJMaterial.cs" />
+    <Compile Remove="KianCommons\KianCommons\Patches\HarmonyUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\Patches\PrefixUtils.cs" />
+    <Compile Remove="KianCommons\KianCommons\Patches\TranspilerUtils.cs" />
+    <Compile Remove="KianCommons\KianCommons\Serialization\IOHelpers.cs" />
+    <Compile Remove="KianCommons\KianCommons\Serialization\JsonUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\Serialization\SerializationUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\Serialization\Vector3Serializable.cs" />
+    <Compile Remove="KianCommons\KianCommons\Serialization\XMLUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\UI\UIExtensions.cs" />
+    <Compile Remove="KianCommons\KianCommons\Util\AssemblyTypeExtensions.cs" />
+    <Compile Remove="KianCommons\KianCommons\Util\AuxilaryThread.cs" />
+    <Compile Remove="KianCommons\KianCommons\Util\CSURUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\Util\MeshUtil.cs" />
+    <Compile Remove="KianCommons\KianCommons\Util\StackHelpers.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\MeshExt.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\StringExt.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\Utils.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\Vector3Ext.cs" />
+    <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\Vector4Ext.cs" />
+    <Compile Remove="KianCommons\KianCommons\UI\Helpers\UICheckboxDropDownExt.cs" />
+    <Compile Remove="KianCommons\KianCommons\UI\Helpers\UIDropDownExt.cs" />
+    <Compile Remove="KianCommons\KianCommons\obj\Debug\net35\KianCommons.AssemblyInfo.cs" />
+    <Compile Remove="KianCommons\KianCommons\obj\Release\net35\KianCommons.AssemblyInfo.cs" />
+    <None Remove="KianCommons\.git" />
+    <None Remove="KianCommons\.gitattributes" />
+    <None Remove="KianCommons\.gitignore" />
+    <None Remove="KianCommons\Main.yml" />
+  </ItemGroup>
+  <Target Name="DeployToModDirectory" AfterTargets="Build">
+    <Message Importance="high" Text="DeployToModDirectory ..." />
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="Targets" />
     </GetAssemblyIdentity>
     <ItemGroup>
+      <AuxiliaryFiles Include="$(TargetDir)**/*.*" Exclude="$(TargetPath);$(TargetDir)*.pdb" />
       <VersionNumber Include="@(Targets->'%(Version)')" />
     </ItemGroup>
-  </Target>
-  <PropertyGroup>
-    <PostBuildEventDependsOn>
-      $(PostBuildEventDependsOn);
-      PostBuildMacros;
-    </PostBuildEventDependsOn>
-    <PostBuildEvent>set "MONODIR=C:\Program Files\Unity\Editor\Data\MonoBleedingEdge\"
-echo monodir  is "%25MONODIR%25"
-"%25MONODIR%25\bin\mono.exe" "%25MONODIR%25\lib\mono\4.5\pdb2mdb.exe" "$(TargetPath)"
-
-
-set "DEPLOYDIR=$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(TargetName)\"
-
-xcopy /y /v "$(TargetPath).mdb" "%25DEPLOYDIR%25"
-
-
-
-del  "%25DEPLOYDIR%25$(TargetFileName)"
-
-xcopy /y /v "$(TargetPath)" "%25DEPLOYDIR%25"
-
-
-
-echo THE ASSEMBLY VERSION IS: @(VersionNumber) created at %25time%25
-set DEPLOYDIR=</PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\packages\GitInfo.2.1.2\build\GitInfo.targets" Condition="Exists('..\packages\GitInfo.2.1.2\build\GitInfo.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <DeployDir Condition="'$(DeployDir)'==''">$(LOCALAPPDATA)/Colossal Order/Cities_Skylines/Addons/Mods/$(SolutionName)/</DeployDir>
+      <Now>$([System.DateTime]::Now.ToString("HH:mm:ss"))</Now>
+      <pdb2mdb>$(PkgMono_Unofficial_pdb2mdb)/tools/pdb2mdb.exe</pdb2mdb>
+      <ZipFileName>$(SolutionName)-V@(VersionNumber)-$(GitCommit)-$(Configuration).zip</ZipFileName>
+      <ZipFile>$(DeployDir)/../$(ZipFileName)</ZipFile>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\GitInfo.2.1.2\build\GitInfo.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitInfo.2.1.2\build\GitInfo.targets'))" />
+    <ItemGroup>
+      <OldZipFiles Include="$(DeployDir)/../$(SolutionName)-*-$(Configuration).zip" />
+    </ItemGroup>
+
+    <Delete Files="$(TargetPath).mdb" />
+    <Exec Command='"$(pdb2mdb)" "$(TargetPath)"' />
+    <Copy SourceFiles="$(TargetPath).mdb" DestinationFolder="$(DeployDir)" />
+    <Copy SourceFiles="@(AuxiliaryFiles)" DestinationFolder="$(DeployDir)" />
+    <Delete Files="$(DeployDir)$(TargetFileName)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DeployDir)" />
+    <Message Importance="high" Text="AssemblyVersion=@(VersionNumber) time=$(Now)" />
+    <Delete Files="@(OldZipFiles)" />
+    <ZipDirectory SourceDirectory="$(DeployDir)" DestinationFile="$(ZipFile)" />
+  </Target>
+  <Target Name="DeployToWorkshop" AfterTargets="DeployToModDirectory" Condition="'$(ContentID)'!=''">
+    <ItemGroup>
+      <FilesToDelete Include="$(ContentPath)/*.*" Exclude="$(ContentPath)/PreviewImage.png" />
+      <FilesToCopy Include="$(DeployDir)/*.*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(ContentPath)" />
+    <RemoveDir Directories="$(DeployDir)" />
+    <Message Importance="high" Text="Moved to $(ContentPath)" />
+  </Target>
+  <Target Name="CustomClean" BeforeTargets="CoreClean">
+    <RemoveDir Directories="$(TargetDir)" />
+    <PropertyGroup>
+      <DeployDir>$(LOCALAPPDATA)/Colossal Order/Cities_Skylines/Addons/Mods/$(SolutionName)/</DeployDir>
+    </PropertyGroup>
+    <Message Text="removing deploy directory" Importance="high" />
+    <RemoveDir Directories="$(DeployDir)" />
   </Target>
 </Project>
