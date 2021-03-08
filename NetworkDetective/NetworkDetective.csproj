@@ -85,8 +85,6 @@
     <Compile Remove="KianCommons\KianCommons\ObjUnity3D\Extensions\Vector4Ext.cs" />
     <Compile Remove="KianCommons\KianCommons\UI\Helpers\UICheckboxDropDownExt.cs" />
     <Compile Remove="KianCommons\KianCommons\UI\Helpers\UIDropDownExt.cs" />
-    <Compile Remove="KianCommons\KianCommons\obj\Debug\net35\KianCommons.AssemblyInfo.cs" />
-    <Compile Remove="KianCommons\KianCommons\obj\Release\net35\KianCommons.AssemblyInfo.cs" />
     <None Remove="KianCommons\.git" />
     <None Remove="KianCommons\.gitattributes" />
     <None Remove="KianCommons\.gitignore" />
@@ -113,7 +111,7 @@
     </ItemGroup>
 
     <Delete Files="$(TargetPath).mdb" />
-    <Exec Command='"$(pdb2mdb)" "$(TargetPath)"' />
+    <Exec Command="&quot;$(pdb2mdb)&quot; &quot;$(TargetPath)&quot;" />
     <Copy SourceFiles="$(TargetPath).mdb" DestinationFolder="$(DeployDir)" />
     <Copy SourceFiles="@(AuxiliaryFiles)" DestinationFolder="$(DeployDir)" />
     <Delete Files="$(DeployDir)$(TargetFileName)" />
