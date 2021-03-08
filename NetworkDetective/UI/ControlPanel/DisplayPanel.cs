@@ -179,10 +179,13 @@ namespace NetworkDetective.UI.ControlPanel {
 
             foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
                 var item = panel.AddUIComponent<InterAvtiveButton>();
-                item.InstanceID = new InstanceID { NetLane = laneData.LaneID };
+                item.SetLaneData(laneData);
                 item.text = $"Lane[{item.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
-                if(ModSettings.InLineLaneInfo)
+                if(laneData.SegmentID == segmentId)
                     item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
+                else {
+                    item.text += "error: segmentID mismatch: " + laneData;
+                }
                 InterAvtiveButtons.Add(item);
             }
         }

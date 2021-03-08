@@ -2,6 +2,7 @@ using ColossalFramework.UI;
 using KianCommons;
 using KianCommons.UI;
 using NetworkDetective.Util;
+using System;
 using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
@@ -46,14 +47,18 @@ namespace NetworkDetective.UI.ControlPanel {
             get => _instanceID;
             set {
                 _instanceID = value;
-                if (value.Type == InstanceType.NetLane)
+                if(value.Type == InstanceType.NetLane)
                     LaneData = NetUtil.GetLaneData(value.NetLane);
-                else
-                    LaneData = default;
+                else LaneData = default;
             }
         }
 
         public LaneData LaneData { get; private set; } //optional. only valid for lanes.
+
+        public void SetLaneData(LaneData laneData) {
+            LaneData = laneData;
+            _instanceID = new InstanceID {NetLane = laneData.LaneID};
+        }
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo, bool alphaBlend = false) {
             if (!InstanceID.IsValid())
@@ -78,19 +83,25 @@ namespace NetworkDetective.UI.ControlPanel {
             if (InstanceID.IsEmpty)
                 return "Please Hover/Select a network";
 #pragma warning disable
-            return InstanceID.Type switch {
-                InstanceType.NetNode =>
-                    "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode),
-                InstanceType.NetSegment =>
-                    "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment),
-                InstanceType.NetLane =>
-                    "lane flags: " + FlagsUtil.GetLaneFlags(LaneData.LaneID) + "\n" +
-                    "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
-                    "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
-                    "direction: " + LaneData.LaneInfo.m_direction + "\n" +
-                    "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
-                    "start node:" + LaneData.StartNode + "\n",
-                _ => "Unexpected InstanceID.Type: " + InstanceID.Type,
+             switch(InstanceID.Type) {
+                case InstanceType.NetNode:
+                    return "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
+                case InstanceType.NetSegment:
+                    return "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment);
+                case InstanceType.NetLane:
+                    try {
+                        return
+                            "lane flags: " + FlagsUtil.GetLaneFlags(LaneData.LaneID) + "\n" +
+                            "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
+                            "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
+                            "direction: " + LaneData.LaneInfo.m_direction + "\n" +
+                            "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
+                            "start node:" + LaneData.StartNode + "\n";
+                    } catch (Exception ex) {
+                        return LaneData + "\n" + ex.Message;
+                    }
+                default:
+                    return "Unexpected InstanceID.Type: " + InstanceID.Type;
             };
 #pragma warning enable
         }
