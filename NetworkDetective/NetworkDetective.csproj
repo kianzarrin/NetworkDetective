@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
     <Deterministic>false</Deterministic>
-    <Deterministic>false</Deterministic>
     <AssemblyVersion>1.0.2.*</AssemblyVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
