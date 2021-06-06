@@ -25,6 +25,7 @@ namespace NetworkDetective.Tool {
         public enum ModeT {
             Display,
             GoTo,
+            Reverse,
         }
 
         public ModeT Mode;
@@ -134,6 +135,7 @@ namespace NetworkDetective.Tool {
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
             SelectedInstanceID = GetHoveredInstanceID();
             DisplayPanel.Instance.Display(SelectedInstanceID);
+            
         }
 
         protected override void OnSecondaryMouseClicked() {
@@ -143,6 +145,19 @@ namespace NetworkDetective.Tool {
                 GoToPanel.Instance.Hide();
                 SelectedInstanceID = InstanceID.Empty;
                 DisplayPanel.Instance.Display(InstanceID.Empty);
+                if(UpdateToggle.Instance.isChecked)
+                    UpdateInstance(SelectedInstanceID);
+            }
+        }
+
+        static void UpdateInstance(InstanceID instanceID) {
+            switch (instanceID.Type) {
+                case InstanceType.NetNode:
+                    SimulationManager.instance.AddAction(() => NetManager.instance.UpdateNode(instanceID.NetNode));
+                    break;
+                case InstanceType.NetSegment:
+                    SimulationManager.instance.AddAction(() => NetManager.instance.UpdateSegment(instanceID.NetSegment));
+                    break;
             }
         }
     } //end class

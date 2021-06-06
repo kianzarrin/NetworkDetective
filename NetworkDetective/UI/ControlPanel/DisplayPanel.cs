@@ -96,6 +96,12 @@ namespace NetworkDetective.UI.ControlPanel {
 
                 var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
                 gotoBtn.relativePosition = new Vector2(width - 80, 3f);
+
+                var reverseBtn = dragHandle_.AddUIComponent<ReverseButton>();
+                reverseBtn.relativePosition = new Vector2(width - 120, 3f);
+
+                var updateBtn = dragHandle_.AddUIComponent<UpdateToggle>();
+                updateBtn.relativePosition = new Vector2(width - 160, 3f);
             }
 
             AddSpacePanel(this, 10);
