@@ -18,7 +18,7 @@ namespace NetworkDetective.Tool {
         UIButton button;
 
         protected override void Awake() {
-            //button = NetworkDetectiveButton.CreateButton();
+            Log.Called();
             base.Awake();
         }
 
@@ -31,11 +31,16 @@ namespace NetworkDetective.Tool {
 
 
         public static NetworkDetectiveTool Create() {
-            Log.Info("NetworkDetectiveTool.Create()");
-            GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
-            var tool = toolModControl.GetComponent<NetworkDetectiveTool>() ?? toolModControl.AddComponent<NetworkDetectiveTool>();
-            tool.DisableTool();
-            return tool;
+            try {
+                Log.Called();
+                GameObject toolModControl = ToolsModifierControl.toolController.gameObject;
+                var tool = toolModControl.GetComponent<NetworkDetectiveTool>() ?? toolModControl.AddComponent<NetworkDetectiveTool>();
+                tool.DisableTool();
+                return tool;
+            } catch (Exception ex) {
+                ex.Log();
+                throw ex;
+            }
         }
 
         public static NetworkDetectiveTool Instance {
@@ -48,32 +53,41 @@ namespace NetworkDetective.Tool {
         public InstanceID SelectedInstanceID { get; set; }
 
         public static void Remove() {
-            Log.Debug("NetworkDetectiveTool.Remove()");
-            var tool = Instance;
-            if (tool != null)
-                Destroy(tool);
+            try {
+                Log.Called();
+                var tool = Instance;
+                if (tool != null)
+                    Destroy(tool);
+            } catch (Exception ex) { ex.Log(); }
         }
 
         protected override void OnDestroy() {
-            Log.Debug("NetworkDetectiveTool.OnDestroy()\n" + Environment.StackTrace);
-            button?.Hide();
-            Destroy(button);
+            try {
+                Log.Debug("NetworkDetectiveTool.OnDestroy()\n" + Environment.StackTrace);
+                button?.Hide();
+                Destroy(button);
+            } catch (Exception ex) { ex.Log(); }
             base.OnDestroy();
         }
 
         //public override void EnableTool() => ToolsModifierControl.SetTool<NetworkDetectiveTool>();
 
         protected override void OnEnable() {
-            DisplayPanel.Instance?.Display(InstanceID.Empty);
-            Log.Debug("NetworkDetectiveTool.OnEnable");
-            base.OnEnable();
+            try {
+                base.OnEnable();
+                Log.Called();
+                DisplayPanel.Instance?.Display(InstanceID.Empty);
+                Log.Called();
+            } catch (Exception ex) { ex.Log(); }
         }
 
         protected override void OnDisable() {
-            DisplayPanel.Instance?.Close();
-            GoToPanel.Instance.Close();
-            Log.Debug("NetworkDetectiveTool.OnDisable");
-            base.OnDisable();
+            try {
+                DisplayPanel.Instance?.Close();
+                GoToPanel.Instance.Close();
+                Log.Called();
+                base.OnDisable();
+            } catch (Exception ex) { ex.Log(); }
         }
 
         protected override void OnToolUpdate() {

@@ -40,12 +40,14 @@ namespace NetworkDetective.UI.ControlPanel {
         public InterActiveButton Title;
 
         public static DisplayPanel Create() {
+            Log.Called();
             var uiView = UIView.GetAView();
             DisplayPanel panel = uiView.AddUIComponent(typeof(DisplayPanel)) as DisplayPanel;
             return panel;
         }
 
         public static void Release() {
+            Log.Called();
             Destroy(Instance);
         }
 
@@ -53,7 +55,13 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public override void Awake() {
             base.Awake();
+            Log.Called();
+
             Instance = this;
+        }
+        public override void OnDestroy() {
+            Log.Called();
+            base.OnDestroy();
         }
 
         bool started_ = false;
@@ -247,14 +255,14 @@ namespace NetworkDetective.UI.ControlPanel {
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
                 return;
-            Log.Debug("DisplayPanel.Display() called ");
+            Log.Called();
             Show();
             InstanceID = instanceID;
             RefreshSizeRecursive();
         }
 
         public void Close() {
-            Log.Debug("DisplayPanel.Close() called");
+            Log.Called();
             Hide();
         }
 
