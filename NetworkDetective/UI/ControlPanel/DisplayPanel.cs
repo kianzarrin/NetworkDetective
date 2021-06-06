@@ -33,11 +33,11 @@ namespace NetworkDetective.UI.ControlPanel {
             }
         }
 
-        public List<InterAvtiveButton> InterAvtiveButtons;
+        public List<InterActiveButton> InterActiveButtons;
         public UIAutoSizePanel ContainerOfPopulatablePanel;
         public UIAutoSizePanel PupulatablePanel;
         public UILabel Details;
-        public InterAvtiveButton Title;
+        public InterActiveButton Title;
 
         public static DisplayPanel Create() {
             var uiView = UIView.GetAView();
@@ -95,7 +95,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
             {
                 var panel = AddPanel();
-                Title = panel.AddUIComponent<InterAvtiveButton>();
+                Title = panel.AddUIComponent<InterActiveButton>();
             }
 
             AddSpacePanel(this, 5);
@@ -142,7 +142,7 @@ namespace NetworkDetective.UI.ControlPanel {
             }
 
             PupulatablePanel = AddPanel(ContainerOfPopulatablePanel);
-            InterAvtiveButtons = new List<InterAvtiveButton>(32);
+            InterActiveButtons = new List<InterActiveButton>(32);
 
             if (InstanceID.Type == InstanceType.NetSegment) {
                 PupulateSegmentMembers(PupulatablePanel, InstanceID.NetSegment);
@@ -155,30 +155,30 @@ namespace NetworkDetective.UI.ControlPanel {
 
         void PupulateSegmentMembers(UIAutoSizePanel panel,  ushort segmentId) {
             {
-                var item = panel.AddUIComponent<InterAvtiveButton>();
+                var item = panel.AddUIComponent<InterActiveButton>();
                 ushort nodeId = segmentId.ToSegment().m_startNode;
                 item.InstanceID = new InstanceID { NetNode = nodeId };
                 bool isHeadNode = NetUtil.GetHeadNode(segmentId) == nodeId;
                 string t = isHeadNode ? "head" : "tail";
                 item.text = $"Start node: {nodeId} ({t} node) ";
                 item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
-                InterAvtiveButtons.Add(item);
+                InterActiveButtons.Add(item);
             }
             {
-                var item = panel.AddUIComponent<InterAvtiveButton>();
+                var item = panel.AddUIComponent<InterActiveButton>();
                 ushort nodeId = segmentId.ToSegment().m_endNode;
                 item.InstanceID = new InstanceID { NetNode = nodeId };
                 bool isHeadNode = NetUtil.GetHeadNode(segmentId) == nodeId;
                 string t = isHeadNode ? "head" : "tail";
                 item.text = $"End node: {nodeId} ({t} node) ";
                 item.tooltip = "if the road was a oneway road, cars drive from tail node to head node.";
-                InterAvtiveButtons.Add(item);
+                InterActiveButtons.Add(item);
             }
 
             AddSpacePanel(panel, 5);
 
             foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
-                var item = panel.AddUIComponent<InterAvtiveButton>();
+                var item = panel.AddUIComponent<InterActiveButton>();
                 item.SetLaneData(laneData);
                 item.text = $"Lane[{item.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
                 if(laneData.SegmentID == segmentId)
@@ -187,7 +187,7 @@ namespace NetworkDetective.UI.ControlPanel {
                     item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
                     Log.Error(item.text);
                 }
-                InterAvtiveButtons.Add(item);
+                InterActiveButtons.Add(item);
             }
         }
 
@@ -196,8 +196,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 ushort segmentId = nodeId.ToNode().GetSegment(i);
                 if (segmentId == 0) continue;
                 bool startNode = NetUtil.IsStartNode(segmentId: segmentId, nodeId: nodeId);
-                var item = panel.AddUIComponent<InterAvtiveButton>();
-                InterAvtiveButtons.Add(item);
+                var item = panel.AddUIComponent<InterActiveButton>();
+                InterActiveButtons.Add(item);
                 item.InstanceID = new InstanceID { NetSegment = segmentId};
                 item.text = $"Segment: {segmentId} " + (startNode ? "(start node)" : "end node");
             }
@@ -205,15 +205,15 @@ namespace NetworkDetective.UI.ControlPanel {
             AddSpacePanel(panel, 3);
 
             //foreach (uint laneId in NetUtil.IterateNodeLanes(nodeId)) {
-            //    var item = panel.AddUIComponent<InterAvtiveButton>();
+            //    var item = panel.AddUIComponent<InterActiveButton>();
             //    item.InstanceID = new InstanceID { NetLane = laneId };
             //    item.text = $"Lane: " + laneId;
-            //    InterAvtiveButtons.Add(item);
+            //    InterActiveButtons.Add(item);
             //}
         }
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
-            foreach(var item in InterAvtiveButtons) {
+            foreach(var item in InterActiveButtons) {
                 if (item.IsHovered) {
                     item.RenderOverlay(cameraInfo,false);
                 } 
@@ -235,7 +235,7 @@ namespace NetworkDetective.UI.ControlPanel {
             };
         }
 
-        public void UpdateDetails(InterAvtiveButton item) {
+        public void UpdateDetails(InterActiveButton item) {
             Details.text = item.GetDetails();
             RefreshSizeRecursive();
         }

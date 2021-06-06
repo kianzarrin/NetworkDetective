@@ -6,7 +6,7 @@ using System;
 using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
-    public class InterAvtiveButton : UIButton {
+    public class InterActiveButton : UIButton {
         public override void Awake() {
             base.Awake();
 
@@ -22,7 +22,7 @@ namespace NetworkDetective.UI.ControlPanel {
         }
         public override void Start() {
             base.Start();
-            //Log.Debug("InterAvtiveButton.Start");
+            //Log.Debug("InterActiveButton.Start");
 
             // Style the button to look like a menu
             atlas = TextureUtil.GetAtlas("Ingame");
@@ -111,20 +111,20 @@ namespace NetworkDetective.UI.ControlPanel {
 
         protected override void OnClick(UIMouseEventParameter p) {
             base.OnClick(p);
-            Log.Debug("InterAvtiveButton.OnClick");
+            Log.Debug("InterActiveButton.OnClick");
             if (InstanceID.Type != InstanceType.NetLane)
                 DisplayPanel.Instance.Display(this.InstanceID);
         }
 
         protected override void OnMouseEnter(UIMouseEventParameter p) {
             base.OnMouseEnter(p);
-            //Log.Debug("InterAvtiveButton.OnMouseEnter");
+            //Log.Debug("InterActiveButton.OnMouseEnter");
             DisplayPanel.Instance.UpdateDetails(this);
         }
 
         protected override void OnMouseLeave(UIMouseEventParameter p) {
             base.OnMouseLeave(p);
-            //Log.Debug("InterAvtiveButton.OnMouseLeave");
+            //Log.Debug("InterActiveButton.OnMouseLeave");
             DisplayPanel.Instance.UpdateDetails(DisplayPanel.Instance.Title); // default
         }
 
