@@ -37,6 +37,28 @@ namespace NetworkDetective.UI.ControlPanel {
 
             // Enable button sounds.
             playAudioEvents = true;
+
+            if (InstanceID.Type == InstanceType.NetNode || InstanceID.Type == InstanceType.NetSegment) {
+                var b = AddUIComponent<RemoveButton>();
+                b.relativePosition = new Vector2(width-30, 0);
+                b.eventClick += RemoveButton_eventClick;
+                b.size = new Vector2(30, 30);
+            }
+        }
+
+        private void RemoveButton_eventClick(UIComponent component, UIMouseEventParameter eventParam) {
+            if (InstanceID.Type == InstanceType.NetNode)
+                SimulationManager.instance.AddAction(() => NetManager.instance.ReleaseNode(InstanceID.NetNode));
+            else if (InstanceID.Type == InstanceType.NetSegment)
+                SimulationManager.instance.AddAction(() => NetManager.instance.ReleaseSegment(InstanceID.NetSegment, keepNodes:true));
+            eventParam.Use();
+        }
+
+        private void UpdateButton_eventClick(UIComponent component, UIMouseEventParameter eventParam) {
+            if (InstanceID.Type == InstanceType.NetNode)
+                SimulationManager.instance.AddAction(() => NetManager.instance.UpdateNode(InstanceID.NetNode));
+            else if (InstanceID.Type == InstanceType.NetSegment)
+                SimulationManager.instance.AddAction(() => NetManager.instance.UpdateSegment(InstanceID.NetSegment));
         }
 
         public bool IsHovered => this.m_IsMouseHovering;

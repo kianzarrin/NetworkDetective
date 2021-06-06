@@ -50,11 +50,6 @@
     <Reference Include="UnityEngine.UI" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\back.png" />
-    <EmbeddedResource Include="Resources\close.png" />
-    <EmbeddedResource Include="Resources\goto.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Remove="KianCommons\**" />
     <EmbeddedResource Remove="KianCommons\**" />
     <None Remove="KianCommons\**" />
@@ -97,6 +92,17 @@
     <Compile Include="KianCommons\KianCommons\Util\StackHelpers.cs" />
     <Compile Include="KianCommons\KianCommons\Util\StringExtensions.cs" />
     <Compile Include="KianCommons\KianCommons\Util\TypeUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\close.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\goto.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup> 
   <Target Name="DeployToModDirectory" AfterTargets="Build">
     <Message Importance="high" Text="DeployToModDirectory ..." />

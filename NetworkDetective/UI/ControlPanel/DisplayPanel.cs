@@ -11,9 +11,8 @@ namespace NetworkDetective.UI.ControlPanel {
     using static System.Environment;
 
 
-    // TODO node lanes !
+    // TODO node lanes 
     // TODO lane as title. ?
-    // TODO why segment flags are always 0.
     public class DisplayPanel : UIAutoSizePanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);

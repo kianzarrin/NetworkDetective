@@ -101,7 +101,7 @@ namespace NetworkDetective.Tool {
         public InstanceID GetHoveredInstanceID() {
             if (!HoverValid)
                 return InstanceID.Empty;
-            else if (HelpersExtensions.ControlIsPressed) 
+            else if (Helpers.ControlIsPressed) 
                 return new InstanceID { NetNode = HoveredNodeId };
             else 
                 return new InstanceID { NetSegment = HoveredSegmentId };

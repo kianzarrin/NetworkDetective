@@ -18,7 +18,7 @@ namespace NetworkDetective {
             "gives information about segment, node and lane instances.";
         
         public void OnEnabled() {
-
+            KianCommons.UI.TextureUtil.EmbededResources = false;
             try {
                 if (HelpersExtensions.currentMode != AppMode.ThemeEditor)
                     LoadTool.Load(); // hot reload

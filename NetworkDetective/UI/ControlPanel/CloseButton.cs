@@ -6,15 +6,9 @@ using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
     public class CloseButton: UIButton {
-        public static CloseButton Instance { get; private set; }
-
-        public static CloseButton Instace { get; private set; }
-
-        public static string AtlasName = "CloseButtonUI_rev" +
-            typeof(CloseButton).Assembly.GetName().Version.Revision;
+        public string AtlasName => GetType().FullName + "_rev" + GetType().VersionOf();
         const int SIZE = 40;
-        const string CONTAINING_PANEL_NAME = "RoadsOptionPanel";
-        readonly static Vector2 RELATIVE_POSITION = new Vector2(94, 38);
+
 
         const string CloseButtonBg = "CloseButtonBg";
         const string CloseButtonBgPressed = "CloseButtonBgPressed";
@@ -23,10 +17,8 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public override void Awake() {
             base.Awake();
-            Log.Debug("CloseButton.Awake() is called.");
             name = nameof(CloseButton);
             size = new Vector2(SIZE, SIZE);
-            Instace = this;
         }
 
         public override void Start() {

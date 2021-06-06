@@ -6,15 +6,8 @@ using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
     public class BackButton: UIButton {
-        public static BackButton Instance { get; private set; }
-
-        public static BackButton Instace { get; private set; }
-
-        public static string AtlasName = "BackButtonUI_rev" +
-            typeof(BackButton).Assembly.GetName().Version.Revision;
+        public string AtlasName => GetType().FullName + "_rev" + GetType().VersionOf();
         const int SIZE = 40;
-        const string CONTAINING_PANEL_NAME = "RoadsOptionPanel";
-        readonly static Vector2 RELATIVE_POSITION = new Vector2(94, 38);
 
         const string BackButtonBg = "BackButtonBg";
         const string BackButtonBgPressed = "BackButtonBgPressed";
@@ -26,7 +19,6 @@ namespace NetworkDetective.UI.ControlPanel {
             Log.Debug("BackButton.Awake() is called.");
             name = nameof(BackButton);
             size = new Vector2(SIZE, SIZE);
-            Instace = this;
         }
 
         public override void Start() {

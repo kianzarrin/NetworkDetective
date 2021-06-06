@@ -1,6 +1,7 @@
 using ColossalFramework.UI;
 using ICities;
 using ColossalFramework;
+using KianCommons;
 
 namespace NetworkDetective.UI {
     using Tool;
@@ -32,6 +33,31 @@ namespace NetworkDetective.UI {
             //    "Display lane type/vehicle type in parantheses in front of each lane.",
             //    InLineLaneInfo.value,
             //    val => InLineLaneInfo.value = val);
+
+            helper.AddButton(
+                "Update All Roads (slower)",
+                () => SimulationManager.instance.AddAction(UpdateAllRoads));
+            helper.AddButton(
+                "Refresh all Network Renderers (faster)",
+                () => SimulationManager.instance.AddAction(RefreshAllNetworkRenderers));
+        }
+
+        static void UpdateAllRoads() {
+            for (ushort segmentID = 0; segmentID < NetManager.MAX_SEGMENT_COUNT; ++segmentID) {
+                if (NetUtil.IsSegmentValid(segmentID) && segmentID.ToSegment().Info?.m_netAI is RoadBaseAI) {
+                    NetManager.instance.UpdateSegment(segmentID);
+                }
+            }
+        }
+        static void RefreshAllNetworkRenderers() {
+            for (ushort segmentID = 0; segmentID < NetManager.MAX_SEGMENT_COUNT; ++segmentID) 
+                if (NetUtil.IsSegmentValid(segmentID)) 
+                    NetManager.instance.UpdateSegmentRenderer(segmentID,true);
+            for (ushort nodeID = 0; nodeID < NetManager.MAX_NODE_COUNT; ++nodeID)
+                if (NetUtil.IsNodeValid(nodeID))
+                    NetManager.instance.UpdateNodeRenderer(nodeID, true);
+
+
         }
     }
 }

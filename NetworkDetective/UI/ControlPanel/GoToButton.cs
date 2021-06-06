@@ -7,15 +7,9 @@ using UIUtils = KianCommons.UI.UIUtils;
 
 namespace NetworkDetective.UI.ControlPanel {
     public class GoToButton: UIButton {
-        public static GoToButton Instance { get; private set; }
-
-        public static GoToButton Instace { get; private set; }
-
-        public static string AtlasName = "GoToButtonUI_rev" +
-            typeof(GoToButton).Assembly.GetName().Version.Revision;
+        public string AtlasName => GetType().FullName + "_rev" + GetType().VersionOf();
         const int SIZE = 40;
-        const string CONTAINING_PANEL_NAME = "RoadsOptionPanel";
-        readonly static Vector2 RELATIVE_POSITION = new Vector2(94, 38);
+
 
         const string GoToButtonBg = "GoToButtonBg";
         const string GoToButtonBgPressed = "GoToButtonBgPressed";
@@ -24,10 +18,8 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public override void Awake() {
             base.Awake();
-            Log.Debug("GoToButton.Awake() is called.");
             name = nameof(GoToButton);
             size = new Vector2(SIZE, SIZE);
-            Instace = this;
         }
 
         public override void Start() {
