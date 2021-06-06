@@ -1,20 +1,18 @@
 namespace NetworkDetective.UI.ControlPanel {
     using ColossalFramework;
     using ColossalFramework.UI;
+    using GoToPanel;
     using KianCommons;
     using KianCommons.UI;
-    using NetworkDetective.UI.ControlPanel;
+    using NetworkDetective.Tool;
     using System.Collections.Generic;
     using UnityEngine;
-    using GoToPanel;
-    using NetworkDetective.Tool;
-    using static System.Environment;
-
+    using static KianCommons.ReflectionHelpers;
 
     // TODO node lanes !
     // TODO lane as title. ?
     // TODO why segment flags are always 0.
-    public class DisplayPanel : UIAutoSizePanel {
+    public class DisplayPanel : UIPanel {
         public static readonly SavedFloat SavedX = new SavedFloat(
             "PanelX", ModSettings.FILE_NAME, 87, true);
         public static readonly SavedFloat SavedY = new SavedFloat(
@@ -41,25 +39,33 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public static DisplayPanel Create() {
             var uiView = UIView.GetAView();
-            DisplayPanel panel = uiView.AddUIComponent(typeof(DisplayPanel)) as DisplayPanel;
-            return panel;
+            return Instance = uiView.AddUIComponent(typeof(DisplayPanel)) as DisplayPanel;
+        }
+        public static void Display(InstanceID instanceID) {
+            if (!Instance) Create();
+            Instance.DisplayImpl(instanceID);
         }
 
-        public static void Release() {
-            Destroy(Instance);
+        void DisplayImpl(InstanceID instanceID) {
+            GoToPanel.Release();
+            NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
+            if (isVisible && InstanceID == instanceID)
+                return;
+            Log.Debug("DisplayPanel.Display() called ");
+            Show();
+            InstanceID = instanceID;
+            //FitChildren();
         }
+
+        public static void Release() => Instance?.Close();
+
+        public void Close() => DestroyImmediate(gameObject);
 
         #endregion Instanciation
 
         public override void Awake() {
             base.Awake();
-            Instance = this;
-        }
-
-        bool started_ = false;
-        public override void Start() {
-            base.Start();
-            Log.Debug("ControlPanel started");
+            LogCalled();
 
             width = 500;
             name = "ControlPanel";
@@ -85,7 +91,7 @@ namespace NetworkDetective.UI.ControlPanel {
                 //sprite.spriteName = PedestrianBridgeButton.PedestrianBridgeIconPressed;
 
                 var closeBtn = dragHandle_.AddUIComponent<CloseButton>();
-                closeBtn.relativePosition = new Vector2(width - 40 , 3f);
+                closeBtn.relativePosition = new Vector2(width - 40, 3f);
 
                 var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
                 gotoBtn.relativePosition = new Vector2(width - 80, 3f);
@@ -110,8 +116,8 @@ namespace NetworkDetective.UI.ControlPanel {
                 Details.wordWrap = true;
             }
 
-            isVisible = false;
-            started_ = true;
+            autoFitChildrenHorizontally = true;
+            m_AutoFitChildrenVertically = true;
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -146,14 +152,12 @@ namespace NetworkDetective.UI.ControlPanel {
 
             if (InstanceID.Type == InstanceType.NetSegment) {
                 PupulateSegmentMembers(PupulatablePanel, InstanceID.NetSegment);
-            }else if(InstanceID.Type == InstanceType.NetNode) {
+            } else if (InstanceID.Type == InstanceType.NetNode) {
                 PupulateNodeMembers(PupulatablePanel, InstanceID.NetNode);
             }
-
-            RefreshSizeRecursive();
         }
 
-        void PupulateSegmentMembers(UIAutoSizePanel panel,  ushort segmentId) {
+        void PupulateSegmentMembers(UIAutoSizePanel panel, ushort segmentId) {
             {
                 var item = panel.AddUIComponent<InterActiveButton>();
                 ushort nodeId = segmentId.ToSegment().m_startNode;
@@ -177,11 +181,11 @@ namespace NetworkDetective.UI.ControlPanel {
 
             AddSpacePanel(panel, 5);
 
-            foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
+            foreach (var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
                 var item = panel.AddUIComponent<InterActiveButton>();
                 item.SetLaneData(laneData);
                 item.text = $"Lane[{item.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
-                if(laneData.SegmentID == segmentId)
+                if (laneData.SegmentID == segmentId)
                     item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
                 else {
                     item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
@@ -192,13 +196,13 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         void PupulateNodeMembers(UIAutoSizePanel panel, ushort nodeId) {
-            for(int i = 0; i < 8; ++i) {
+            for (int i = 0; i < 8; ++i) {
                 ushort segmentId = nodeId.ToNode().GetSegment(i);
                 if (segmentId == 0) continue;
                 bool startNode = NetUtil.IsStartNode(segmentId: segmentId, nodeId: nodeId);
                 var item = panel.AddUIComponent<InterActiveButton>();
                 InterActiveButtons.Add(item);
-                item.InstanceID = new InstanceID { NetSegment = segmentId};
+                item.InstanceID = new InstanceID { NetSegment = segmentId };
                 item.text = $"Segment: {segmentId} " + (startNode ? "(start node)" : "end node");
             }
 
@@ -213,12 +217,12 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
-            foreach(var item in InterActiveButtons) {
+            foreach (var item in InterActiveButtons) {
                 if (item.IsHovered) {
-                    item.RenderOverlay(cameraInfo,false);
-                } 
+                    item.RenderOverlay(cameraInfo, false);
+                }
             }
-            Title.RenderOverlay(cameraInfo,true);
+            Title.RenderOverlay(cameraInfo, true);
         }
 
         public void UpdateTitle() {
@@ -226,8 +230,7 @@ namespace NetworkDetective.UI.ControlPanel {
                 Title.text = "0";
                 return;
             }
-            Title.text = InstanceID.Type switch
-            {
+            Title.text = InstanceID.Type switch {
                 InstanceType.NetNode => "Node: " + InstanceID.NetNode,
                 InstanceType.NetSegment => "Segment: " + InstanceID.NetSegment,
                 InstanceType.NetLane => $"Lane[{Title.LaneData.LaneIndex}]: {InstanceID.NetLane}",
@@ -237,25 +240,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
         public void UpdateDetails(InterActiveButton item) {
             Details.text = item.GetDetails();
-            RefreshSizeRecursive();
-        }
-
-        public void Display(InstanceID instanceID) {
-            if (!started_)
-                return;
-            GoToPanel.Instance.Close();
-            NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
-            if (isVisible && InstanceID == instanceID)
-                return;
-            Log.Debug("DisplayPanel.Display() called ");
-            Show();
-            InstanceID = instanceID;
-            RefreshSizeRecursive();
-        }
-
-        public void Close() {
-            Log.Debug("DisplayPanel.Close() called");
-            Hide();
+            //FitChildren();
         }
 
         protected override void OnPositionChanged() {

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
     <Deterministic>false</Deterministic>
@@ -32,6 +32,28 @@
       ../libs/
     </AssemblySearchPaths>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Reference>
+      <Private>False</Private>
+    </Reference>
+  </ItemDefinitionGroup>  
+  <ItemGroup>
+    <PackageReference Include="Mono.Unofficial.pdb2mdb" Version="4.2.3.4" />
+    <PackageReference Include="GitInfo" Version="2.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="ColossalManaged" />
+    <Reference Include="ICities" />
+    <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine.UI" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\back.png" />
+    <EmbeddedResource Include="Resources\close.png" />
+    <EmbeddedResource Include="Resources\goto.png" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Remove="KianCommons\**" />
     <EmbeddedResource Remove="KianCommons\**" />
@@ -75,23 +97,6 @@
     <Compile Include="KianCommons\KianCommons\Util\StackHelpers.cs" />
     <Compile Include="KianCommons\KianCommons\Util\StringExtensions.cs" />
     <Compile Include="KianCommons\KianCommons\Util\TypeUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Mono.Unofficial.pdb2mdb" Version="4.2.3.4" />
-    <PackageReference Include="GitInfo" Version="2.1.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <Reference Include="Assembly-CSharp" />
-    <Reference Include="ColossalManaged" />
-    <Reference Include="ICities" />
-    <Reference Include="UnityEngine" />
-    <Reference Include="UnityEngine.UI" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\back.png" />
-    <EmbeddedResource Include="Resources\close.png" />
-    <EmbeddedResource Include="Resources\goto.png" />
   </ItemGroup>
   <Target Name="DeployToModDirectory" AfterTargets="Build">
     <Message Importance="high" Text="DeployToModDirectory ..." />

@@ -66,7 +66,7 @@ namespace NetworkDetective.UI.ControlPanel {
         protected override void OnClick(UIMouseEventParameter p) {
             Log.Debug("ON CLICK CALLED");
             base.OnClick(p);
-            DisplayPanel.Instance.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
+            DisplayPanel.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
         }
     }
 }

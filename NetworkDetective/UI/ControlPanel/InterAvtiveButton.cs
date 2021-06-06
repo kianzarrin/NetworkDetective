@@ -19,23 +19,11 @@ namespace NetworkDetective.UI.ControlPanel {
             //autoSize = true;
             textPadding = new RectOffset(10, 10, 5, 5);
             textHorizontalAlignment = UIHorizontalAlignment.Left;
-        }
-        public override void Start() {
-            base.Start();
-            //Log.Debug("InterActiveButton.Start");
 
-            // Style the button to look like a menu
             atlas = TextureUtil.GetAtlas("Ingame");
             normalBgSprite = disabledBgSprite = focusedBgSprite = "ButtonSmall";
             hoveredBgSprite = "ButtonSmallHovered";
             pressedBgSprite = "ButtonSmallPressed";
-            //textColor = Color.white;
-            //disabledTextColor = new Color32(7, 7, 7, 255);
-            //hoveredTextColor = new Color32(7, 132, 255, 255);
-            //focusedTextColor = new Color32(255, 255, 255, 255);
-            //pressedTextColor = new Color32(30, 30, 44, 255);
-
-            // Enable button sounds.
             playAudioEvents = true;
         }
 
@@ -113,7 +101,7 @@ namespace NetworkDetective.UI.ControlPanel {
             base.OnClick(p);
             Log.Debug("InterActiveButton.OnClick");
             if (InstanceID.Type != InstanceType.NetLane)
-                DisplayPanel.Instance.Display(this.InstanceID);
+                DisplayPanel.Display(this.InstanceID);
         }
 
         protected override void OnMouseEnter(UIMouseEventParameter p) {

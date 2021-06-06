@@ -9,20 +9,28 @@ namespace NetworkDetective.UI.GoToPanel {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using static KianCommons.ReflectionHelpers;
 
     public class GoToPanel : UIAutoSizePanel {
         #region Instanciation
         public static GoToPanel Instance { get; private set; }
 
-        public static GoToPanel Create() {
-            var uiView = UIView.GetAView();
-            GoToPanel panel = uiView.AddUIComponent(typeof(GoToPanel)) as GoToPanel;
-            return panel;
+        public static GoToPanel Create() =>
+            Instance = UIView.GetAView().AddUIComponent(typeof(GoToPanel)) as GoToPanel;
+        public static void Open(uint id) {
+            if (!Instance) Create();
+            Instance.OpenImpl(id);
+        }
+        void OpenImpl(uint id) {
+            Log.Debug("GoToPanel.Display() called");
+            NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.GoTo;
+            DisplayPanel.Release();
+            Show();
+            ID = id;
         }
 
-        public static void Release() {
-            Destroy(Instance);
-        }
+        public void Close() => DestroyImmediate(gameObject);
+        public static void Release() => Instance?.Close();
 
         #endregion Instanciation
 
@@ -39,17 +47,10 @@ namespace NetworkDetective.UI.GoToPanel {
             get => _ID;
         }
 
-
-        public override void Awake() {
-            base.Awake();
-            Instance = this;
-        }
-
-
         bool started_ = false;
         public override void Start() {
             base.Start();
-            Log.Debug("GoToPanel started");
+            LogCalled();
 
             width = 150;
             name = "GoToPanel";
@@ -88,7 +89,7 @@ namespace NetworkDetective.UI.GoToPanel {
                 NodeButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
                     InstanceID id = new InstanceID { NetNode = (ushort)ID };
                     NetworkDetectiveTool.Instance.SelectedInstanceID = id;
-                    DisplayPanel.Instance.Display(id);
+                    DisplayPanel.Display(id);
                     GoToInstance(id);
                 };
                 NodeButton.atlas = inGameAtlas;
@@ -97,7 +98,7 @@ namespace NetworkDetective.UI.GoToPanel {
                 SegmentButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
                     InstanceID id = new InstanceID { NetSegment = (ushort)ID };
                     NetworkDetectiveTool.Instance.SelectedInstanceID = id;
-                    DisplayPanel.Instance.Display(id);
+                    DisplayPanel.Display(id);
                     GoToInstance(id);
                 };
                 SegmentButton.atlas = inGameAtlas;
@@ -107,7 +108,7 @@ namespace NetworkDetective.UI.GoToPanel {
                     ushort segmentId = ID.ToLane().m_segment;
                     InstanceID id = new InstanceID { NetSegment = segmentId };
                     NetworkDetectiveTool.Instance.SelectedInstanceID = id;
-                    DisplayPanel.Instance.Display(id);
+                    DisplayPanel.Display(id);
                     GoToInstance(id);
                 };
                 LaneButton.atlas = inGameAtlas;
@@ -120,7 +121,7 @@ namespace NetworkDetective.UI.GoToPanel {
                 var backButton = panel.AddUIComponent<UIButtonExt>();
                 backButton.text = "back";
                 backButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
-                    DisplayPanel.Instance.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
+                    DisplayPanel.Display(NetworkDetectiveTool.Instance.SelectedInstanceID);
                 };
             }
 
@@ -128,6 +129,7 @@ namespace NetworkDetective.UI.GoToPanel {
             RefreshSizeRecursive();
             Invalidate();
             started_ = true;
+            RefreshButtons();
         }
 
         UIAutoSizePanel AddPanel() => AddPanel(this);
@@ -151,22 +153,7 @@ namespace NetworkDetective.UI.GoToPanel {
             return panel;
         }
 
-        public void Open(uint id) {
-            if (!started_)
-                return;
-            Log.Debug("GoToPanel.Display() called");
-            NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.GoTo;
-            DisplayPanel.Instance.Close();
-            Show();
-            ID = id;
-            RefreshSizeRecursive();
-            RefreshButtons();
-        }
 
-        public void Close() {
-            //Log.Debug("GoToPanel.Close() called");
-            Hide();
-        }
 
         protected override void OnPositionChanged() {
             base.OnPositionChanged();

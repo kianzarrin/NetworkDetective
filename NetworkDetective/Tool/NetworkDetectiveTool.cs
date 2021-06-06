@@ -64,14 +64,14 @@ namespace NetworkDetective.Tool {
         //public override void EnableTool() => ToolsModifierControl.SetTool<NetworkDetectiveTool>();
 
         protected override void OnEnable() {
-            DisplayPanel.Instance?.Display(InstanceID.Empty);
+            DisplayPanel.Display(InstanceID.Empty);
             Log.Debug("NetworkDetectiveTool.OnEnable");
             base.OnEnable();
         }
 
         protected override void OnDisable() {
-            DisplayPanel.Instance?.Close();
-            GoToPanel.Instance.Close();
+            DisplayPanel.Release();
+            GoToPanel.Release();
             Log.Debug("NetworkDetectiveTool.OnDisable");
             base.OnDisable();
         }
@@ -101,12 +101,12 @@ namespace NetworkDetective.Tool {
                 if (Mode == ModeT.GoTo)
                     return;
                 if (!SelectedInstanceID.IsValid()) {
-                    DisplayPanel.Instance.Display(GetHoveredInstanceID());
+                    DisplayPanel.Display(GetHoveredInstanceID());
                 } else {
-                    DisplayPanel.Instance.Display(SelectedInstanceID);
+                    DisplayPanel.Display(SelectedInstanceID);
                     RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
                 }
-                DisplayPanel.Instance.RenderOverlay(cameraInfo);
+                DisplayPanel.Instance?.RenderOverlay(cameraInfo);
             } catch(Exception ex) {
                 Log.Exception(ex);
             }
@@ -119,16 +119,16 @@ namespace NetworkDetective.Tool {
                 return;
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
             SelectedInstanceID = GetHoveredInstanceID();
-            DisplayPanel.Instance.Display(SelectedInstanceID);
+            DisplayPanel.Display(SelectedInstanceID);
         }
 
         protected override void OnSecondaryMouseClicked() {
             if (Mode == ModeT.Display && SelectedInstanceID.IsEmpty) {
                 DisableTool();
             } else {
-                GoToPanel.Instance.Hide();
+                GoToPanel.Release();
                 SelectedInstanceID = InstanceID.Empty;
-                DisplayPanel.Instance.Display(InstanceID.Empty);
+                DisplayPanel.Display(InstanceID.Empty);
             }
         }
     } //end class

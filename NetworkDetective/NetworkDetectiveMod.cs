@@ -10,18 +10,6 @@ using System.IO;
 using NetworkDetective.UI.GoToPanel;
 
 namespace NetworkDetective {
-    public static class Test {
-        public static float Factorial(int n) {
-            if (n > 1) {
-                return Factorial(n - 1) * n;
-            } else {
-                Log.Debug(Environment.StackTrace);
-                throw new Exception("test kian exception");
-                return 1;
-            }
-        }
-    }
-
     public class NetworkDetectiveMod : IUserMod {
         public static Version ModVersion => typeof(NetworkDetectiveMod).Assembly.GetName().Version;
         public static string VersionString => ModVersion.ToString(2);
@@ -30,7 +18,7 @@ namespace NetworkDetective {
             "gives information about segment, node and lane instances.";
         
         public void OnEnabled() {
-            //Test.Factorial(4); // TODO delete
+            
             try {
                 if (HelpersExtensions.currentMode != AppMode.ThemeEditor)
                     LoadTool.Load(); // hot reload
@@ -52,15 +40,15 @@ namespace NetworkDetective {
 
     public static class LoadTool {
         public static void Load() {
-            DisplayPanel.Create();
-            GoToPanel.Create();
-            Tool.NetworkDetectiveTool.Create();
-            ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
+            try {
+                Tool.NetworkDetectiveTool.Create();
+                ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
+            } catch(Exception ex) { ex.Log(); }
         }
         public static void Release() {
-            Tool.NetworkDetectiveTool.Remove();
-            GoToPanel.Release();
-            DisplayPanel.Release();
+            try {
+                Tool.NetworkDetectiveTool.Remove();
+            } catch (Exception ex) { ex.Log(); }
         }
     }
 
