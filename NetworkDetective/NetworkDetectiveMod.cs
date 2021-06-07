@@ -44,6 +44,7 @@ namespace NetworkDetective {
                 Log.Called();
                 DisplayPanel.Create();
                 GoToPanel.Create();
+                UI.ReversePanel.ReversePanel.Create();
                 Tool.NetworkDetectiveTool.Create();
                 ToolsModifierControl.SetTool<DefaultTool>(); // disable tool.
             } catch(Exception ex) { ex.Log(); }
@@ -54,6 +55,7 @@ namespace NetworkDetective {
                 Tool.NetworkDetectiveTool.Remove();
                 GoToPanel.Release();
                 DisplayPanel.Release();
+                UI.ReversePanel.ReversePanel.Release();
             } catch (Exception ex) { ex.Log(); }
         }
     }

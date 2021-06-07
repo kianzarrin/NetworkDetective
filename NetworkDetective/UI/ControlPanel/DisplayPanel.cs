@@ -9,6 +9,7 @@ namespace NetworkDetective.UI.ControlPanel {
     using GoToPanel;
     using NetworkDetective.Tool;
     using static System.Environment;
+    using NetworkDetective.UI.ReversePanel;
 
 
     // TODO node lanes 
@@ -257,6 +258,7 @@ namespace NetworkDetective.UI.ControlPanel {
             if (!started_)
                 return;
             GoToPanel.Instance.Close();
+            ReversePanel.Instance.Close();
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
                 return;

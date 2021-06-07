@@ -17,6 +17,9 @@ namespace NetworkDetective.Tool {
 
         UIButton button;
 
+        static SimulationManager simMan = SimulationManager.instance;
+        static NetManager netMan = NetManager.instance;
+
         protected override void Awake() {
             Log.Called();
             base.Awake();
@@ -30,6 +33,13 @@ namespace NetworkDetective.Tool {
 
         public ModeT Mode;
 
+        public enum ReverseModeT {
+            Invert,
+            Reverse,
+            Both,
+        }
+
+        public ReverseModeT ReverseMode;
 
         public static NetworkDetectiveTool Create() {
             try {
@@ -113,30 +123,82 @@ namespace NetworkDetective.Tool {
                 base.RenderOverlay(cameraInfo);
                 if (!enabled)
                     return;
-                if (Mode == ModeT.GoTo)
-                    return;
-                if (!SelectedInstanceID.IsValid()) {
-                    DisplayPanel.Instance.Display(GetHoveredInstanceID());
-                } else {
-                    DisplayPanel.Instance.Display(SelectedInstanceID);
+                if (Mode == ModeT.Display) {
+
+                    if (!SelectedInstanceID.IsValid()) {
+                        DisplayPanel.Instance.Display(GetHoveredInstanceID());
+                    } else {
+                        DisplayPanel.Instance.Display(SelectedInstanceID);
+                        RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
+                    }
+                    DisplayPanel.Instance.RenderOverlay(cameraInfo);
+                } else if(Mode == ModeT.Reverse) {
                     RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
                 }
-                DisplayPanel.Instance.RenderOverlay(cameraInfo);
             } catch(Exception ex) {
                 Log.Exception(ex);
             }
         }
 
         protected override void OnPrimaryMouseClicked() {
-            if (Mode == ModeT.GoTo)
-                return;
             if (!HoverValid)
                 return;
             Log.Info($"OnPrimaryMouseClicked: segment {HoveredSegmentId} node {HoveredNodeId}");
-            SelectedInstanceID = GetHoveredInstanceID();
-            DisplayPanel.Instance.Display(SelectedInstanceID);
-            
+
+            if (Mode == ModeT.Display) {
+                SelectedInstanceID = GetHoveredInstanceID();
+                DisplayPanel.Instance.Display(SelectedInstanceID);
+            } else if (Mode == ModeT.Reverse) {
+                if (ReverseMode == ReverseModeT.Invert) {
+                    simMan.AddAction(() => InvertSegment(HoveredSegmentId));
+                } else if (ReverseMode == ReverseModeT.Reverse) {
+                    simMan.AddAction(() => ReverseSegment(HoveredSegmentId));
+                } else if (ReverseMode == ReverseModeT.Both) {
+                    simMan.AddAction(() => {
+                        InvertSegment(HoveredSegmentId);
+                        ReverseSegment(HoveredSegmentId);
+                    });
+                }
+
+            }
         }
+
+        static void InvertSegment(ushort segmentID) {
+            bool invert = segmentID.ToSegment().IsInvert();
+            segmentID.ToSegment().m_flags.SetFlags(NetSegment.Flags.Invert, !invert);
+        }
+
+        static void ReverseSegment(ushort segmentID) {
+            try {
+                var copy = segmentID.ToSegment();
+                netMan.ReleaseSegment(segmentID, true);
+                segmentID = CreateSegment(
+                    startNodeID: copy.m_endNode,
+                    endNodeID: copy.m_startNode,
+                    startDir: copy.m_endDirection,
+                    endDir: copy.m_startDirection,
+                    info: copy.Info,
+                    invert: copy.IsInvert());
+            } catch (Exception ex) { ex.Log(); }
+        }
+
+        static ushort CreateSegment(
+            ushort startNodeID, ushort endNodeID,
+            Vector3 startDir, Vector3 endDir,
+            NetInfo info, bool invert) {
+            Log.Info($"creating segment for {info.name} between nodes {startNodeID} {endNodeID}");
+            var bi = simMan.m_currentBuildIndex;
+            bool res = netMan.CreateSegment(
+                segment: out ushort segmentID, randomizer: ref simMan.m_randomizer, info: info,
+                startNode: startNodeID, endNode: endNodeID, startDirection: startDir, endDirection: endDir,
+                buildIndex: bi, modifiedIndex: bi, invert: invert);
+            if (!res)
+                throw new NetServiceException("Segment creation failed");
+            simMan.m_currentBuildIndex++;
+            return segmentID;
+        }
+
+        static 
 
         protected override void OnSecondaryMouseClicked() {
             if (Mode == ModeT.Display && SelectedInstanceID.IsEmpty) {

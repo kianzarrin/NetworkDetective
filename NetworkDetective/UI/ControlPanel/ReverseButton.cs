@@ -54,5 +54,11 @@ namespace NetworkDetective.UI.ControlPanel {
                 Invalidate();
             }catch(Exception ex) { ex.Log(); }
         }
+
+        protected override void OnClick(UIMouseEventParameter p) {
+            base.OnClick(p);
+            Tool.NetworkDetectiveTool.Instance.Mode = Tool.NetworkDetectiveTool.ModeT.Reverse;
+        }
+
     }
 }
