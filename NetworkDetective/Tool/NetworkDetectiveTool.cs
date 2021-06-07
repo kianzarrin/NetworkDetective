@@ -161,7 +161,6 @@ namespace NetworkDetective.Tool {
             }
         }
 
-
         void UpdateInstance() {
             InstanceID instanceID = SelectedInstanceID;
             Log.Called(instanceID);
@@ -183,7 +182,7 @@ namespace NetworkDetective.Tool {
             if (instanceID.Type == InstanceType.NetSegment) {
                 ref NetSegment segment = ref instanceID.NetSegment.ToSegment();
                 segment.m_flags = segment.m_flags.SetFlags(NetSegment.Flags.Invert, !segment.IsInvert());
-                Log.Debug(segment.m_flags.ToString());
+                netMan.UpdateSegment(instanceID.NetSegment);
                 simMan.m_ThreadingWrapper.QueueMainThread(DisplayPanel.Instance.RefreshAll);
             }
         }

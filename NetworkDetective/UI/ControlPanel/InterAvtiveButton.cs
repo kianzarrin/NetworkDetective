@@ -7,43 +7,53 @@ using UnityEngine;
 
 namespace NetworkDetective.UI.ControlPanel {
     public class InterActiveButton : UIButton {
+        public bool IsHovered => this.m_IsMouseHovering;
+
+        private InstanceID _instanceID;
+
+        private RemoveButton RemoveButton;
+
+        public InstanceID InstanceID {
+            get => _instanceID;
+            set {
+                _instanceID = value;
+                if (value.Type == InstanceType.NetLane)
+                    LaneData = NetUtil.GetLaneData(value.NetLane);
+                else LaneData = default;
+
+                if (RemoveButton) {
+                    RemoveButton.isVisible =
+                        InstanceID.Type == InstanceType.NetNode ||
+                        InstanceID.Type == InstanceType.NetSegment;
+                }
+            }
+        }
+
+        public LaneData LaneData { get; private set; } //optional. only valid for lanes.
+
+        public void SetLaneData(LaneData laneData) {
+            LaneData = laneData;
+            _instanceID = new InstanceID { NetLane = laneData.LaneID };
+        }
+
         public override void Awake() {
             base.Awake();
-
-            //text = "some text\nnewline";
-            //tooltip = "some tooltip";
-            // Set the button dimensions.
             width = 500;
             height = 30;
 
-            //autoSize = true;
             textPadding = new RectOffset(10, 10, 5, 5);
             textHorizontalAlignment = UIHorizontalAlignment.Left;
-        }
-        public override void Start() {
-            base.Start();
-            //Log.Debug("InterActiveButton.Start");
 
-            // Style the button to look like a menu
             atlas = TextureUtil.GetAtlas("Ingame");
             normalBgSprite = disabledBgSprite = focusedBgSprite = "ButtonSmall";
             hoveredBgSprite = "ButtonSmallHovered";
             pressedBgSprite = "ButtonSmallPressed";
-            //textColor = Color.white;
-            //disabledTextColor = new Color32(7, 7, 7, 255);
-            //hoveredTextColor = new Color32(7, 132, 255, 255);
-            //focusedTextColor = new Color32(255, 255, 255, 255);
-            //pressedTextColor = new Color32(30, 30, 44, 255);
 
-            // Enable button sounds.
-            playAudioEvents = true;
-
-            if (InstanceID.Type == InstanceType.NetNode || InstanceID.Type == InstanceType.NetSegment) {
-                var b = AddUIComponent<RemoveButton>();
-                b.relativePosition = new Vector2(width-30, 0);
-                b.eventClick += RemoveButton_eventClick;
-                b.size = new Vector2(30, 30);
-            }
+            RemoveButton = AddUIComponent<RemoveButton>();
+            RemoveButton.size = new Vector2(30, 30);
+            RemoveButton.relativePosition = new Vector2(width - 30, 0);
+            RemoveButton.isVisible = false;
+            RemoveButton.eventClick += RemoveButton_eventClick;
         }
 
         private void RemoveButton_eventClick(UIComponent component, UIMouseEventParameter eventParam) {
@@ -52,27 +62,6 @@ namespace NetworkDetective.UI.ControlPanel {
             else if (InstanceID.Type == InstanceType.NetSegment)
                 SimulationManager.instance.AddAction(() => NetManager.instance.ReleaseSegment(InstanceID.NetSegment, keepNodes:true));
             eventParam.Use();
-        }
-
-        public bool IsHovered => this.m_IsMouseHovering;
-
-        private InstanceID _instanceID;
-
-        public InstanceID InstanceID {
-            get => _instanceID;
-            set {
-                _instanceID = value;
-                if(value.Type == InstanceType.NetLane)
-                    LaneData = NetUtil.GetLaneData(value.NetLane);
-                else LaneData = default;
-            }
-        }
-
-        public LaneData LaneData { get; private set; } //optional. only valid for lanes.
-
-        public void SetLaneData(LaneData laneData) {
-            LaneData = laneData;
-            _instanceID = new InstanceID {NetLane = laneData.LaneID};
         }
 
         public virtual void RenderOverlay(RenderManager.CameraInfo cameraInfo, bool alphaBlend = false) {

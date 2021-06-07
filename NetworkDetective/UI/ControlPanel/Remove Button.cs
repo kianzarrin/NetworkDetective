@@ -26,7 +26,7 @@ namespace NetworkDetective.UI.ControlPanel {
                 Log.Info("RemoveButton.Start() is called.");
 
                 playAudioEvents = true;
-                tooltip = "Go to network";
+                tooltip = "delete";
 
                 string[] spriteNames = new string[]
                 {
