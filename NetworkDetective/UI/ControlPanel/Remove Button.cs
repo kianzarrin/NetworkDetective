@@ -23,7 +23,6 @@ namespace NetworkDetective.UI.ControlPanel {
         public override void Start() {
             try {
                 base.Start();
-                Log.Info("RemoveButton.Start() is called.");
 
                 playAudioEvents = true;
                 tooltip = "delete";
@@ -38,7 +37,7 @@ namespace NetworkDetective.UI.ControlPanel {
 
                 var atlas = TextureUtil.GetAtlas(AtlasName);
                 if (atlas == UIView.GetAView().defaultAtlas) {
-                    atlas = TextureUtil.CreateTextureAtlas("Close.png", AtlasName, SIZE, SIZE, spriteNames);
+                    atlas = TextureUtil.CreateTextureAtlas("Remove.png", AtlasName, SIZE, SIZE, spriteNames);
                 }
 
                 this.atlas = atlas;
