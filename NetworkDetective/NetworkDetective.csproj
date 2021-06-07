@@ -51,8 +51,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="KianCommons\**" />
+    <Compile Remove="UI\ReversePanel\**" />
     <EmbeddedResource Remove="KianCommons\**" />
+    <EmbeddedResource Remove="UI\ReversePanel\**" />
     <None Remove="KianCommons\**" />
+    <None Remove="UI\ReversePanel\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UI\ControlPanel\ReverseButton.cs" />
+    <Compile Remove="UI\ControlPanel\UpdateToggle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Invert.png" />
+    <None Remove="Resources\update.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KianCommons\KianCommons\Math\BezierUtil.cs" />
@@ -100,16 +111,7 @@
     <None Update="Resources\close.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Invert.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\update.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\goto.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\update.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup> 

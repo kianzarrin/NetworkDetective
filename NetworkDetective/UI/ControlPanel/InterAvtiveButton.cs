@@ -54,13 +54,6 @@ namespace NetworkDetective.UI.ControlPanel {
             eventParam.Use();
         }
 
-        private void UpdateButton_eventClick(UIComponent component, UIMouseEventParameter eventParam) {
-            if (InstanceID.Type == InstanceType.NetNode)
-                SimulationManager.instance.AddAction(() => NetManager.instance.UpdateNode(InstanceID.NetNode));
-            else if (InstanceID.Type == InstanceType.NetSegment)
-                SimulationManager.instance.AddAction(() => NetManager.instance.UpdateSegment(InstanceID.NetSegment));
-        }
-
         public bool IsHovered => this.m_IsMouseHovering;
 
         private InstanceID _instanceID;

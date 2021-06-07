@@ -28,18 +28,19 @@ namespace NetworkDetective.Tool {
         public enum ModeT {
             Display,
             GoTo,
-            Reverse,
         }
 
         public ModeT Mode;
 
-        public enum ReverseModeT {
+        public enum ActionModeT {
+            None,
+            Update,
             Invert,
             Reverse,
-            Both,
+            InvertReverse,
         }
 
-        public ReverseModeT ReverseMode;
+        public ActionModeT ActionMode => ActionDropDown.Instance.SelectedAction;
 
         public static NetworkDetectiveTool Create() {
             try {
@@ -112,9 +113,9 @@ namespace NetworkDetective.Tool {
         public InstanceID GetHoveredInstanceID() {
             if (!HoverValid)
                 return InstanceID.Empty;
-            else if (Helpers.ControlIsPressed) 
+            else if (Helpers.ControlIsPressed)
                 return new InstanceID { NetNode = HoveredNodeId };
-            else 
+            else
                 return new InstanceID { NetSegment = HoveredSegmentId };
         }
 
@@ -124,7 +125,6 @@ namespace NetworkDetective.Tool {
                 if (!enabled)
                     return;
                 if (Mode == ModeT.Display) {
-
                     if (!SelectedInstanceID.IsValid()) {
                         DisplayPanel.Instance.Display(GetHoveredInstanceID());
                     } else {
@@ -132,10 +132,8 @@ namespace NetworkDetective.Tool {
                         RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
                     }
                     DisplayPanel.Instance.RenderOverlay(cameraInfo);
-                } else if(Mode == ModeT.Reverse) {
-                    RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
                 }
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 Log.Exception(ex);
             }
         }
@@ -148,37 +146,91 @@ namespace NetworkDetective.Tool {
             if (Mode == ModeT.Display) {
                 SelectedInstanceID = GetHoveredInstanceID();
                 DisplayPanel.Instance.Display(SelectedInstanceID);
-            } else if (Mode == ModeT.Reverse) {
-                if (ReverseMode == ReverseModeT.Invert) {
-                    simMan.AddAction(() => InvertSegment(HoveredSegmentId));
-                } else if (ReverseMode == ReverseModeT.Reverse) {
-                    simMan.AddAction(() => ReverseSegment(HoveredSegmentId));
-                } else if (ReverseMode == ReverseModeT.Both) {
-                    simMan.AddAction(() => {
-                        InvertSegment(HoveredSegmentId);
-                        ReverseSegment(HoveredSegmentId);
-                    });
-                }
 
+                if (ActionMode == ActionModeT.Update) {
+                    simMan.AddAction(UpdateInstance);
+                }else if (SelectedInstanceID.Type == InstanceType.NetSegment) {
+                    if (ActionMode == ActionModeT.Invert) {
+                        simMan.AddAction(InvertSegment);
+                    } else if (ActionMode == ActionModeT.Reverse) {
+                        simMan.AddAction(ReverseSegment);
+                    } else if (ActionMode == ActionModeT.InvertReverse) {
+                        simMan.AddAction(ReverseInvertSegment);
+                    }
+                }
             }
         }
 
-        static void InvertSegment(ushort segmentID) {
-            bool invert = segmentID.ToSegment().IsInvert();
-            segmentID.ToSegment().m_flags.SetFlags(NetSegment.Flags.Invert, !invert);
+
+        void UpdateInstance() {
+            InstanceID instanceID = SelectedInstanceID;
+            Log.Called(instanceID);
+            switch (instanceID.Type) {
+                case InstanceType.NetNode:
+                    netMan.UpdateNode(instanceID.NetNode);
+                    simMan.m_ThreadingWrapper.QueueMainThread(DisplayPanel.Instance.RefreshAll);
+                    break;
+                case InstanceType.NetSegment:
+                    netMan.UpdateSegment(instanceID.NetSegment);
+                    simMan.m_ThreadingWrapper.QueueMainThread(DisplayPanel.Instance.RefreshAll);
+                    break;
+            }
         }
 
-        static void ReverseSegment(ushort segmentID) {
+        void InvertSegment() {
+            InstanceID instanceID = SelectedInstanceID;
+            Log.Called(instanceID);
+            if (instanceID.Type == InstanceType.NetSegment) {
+                ref NetSegment segment = ref instanceID.NetSegment.ToSegment();
+                segment.m_flags = segment.m_flags.SetFlags(NetSegment.Flags.Invert, !segment.IsInvert());
+                Log.Debug(segment.m_flags.ToString());
+                simMan.m_ThreadingWrapper.QueueMainThread(DisplayPanel.Instance.RefreshAll);
+            }
+        }
+
+        void ReverseSegment() {
             try {
-                var copy = segmentID.ToSegment();
-                netMan.ReleaseSegment(segmentID, true);
-                segmentID = CreateSegment(
-                    startNodeID: copy.m_endNode,
-                    endNodeID: copy.m_startNode,
-                    startDir: copy.m_endDirection,
-                    endDir: copy.m_startDirection,
-                    info: copy.Info,
-                    invert: copy.IsInvert());
+                InstanceID instanceID = SelectedInstanceID;
+                Log.Called(instanceID);
+                if (instanceID.Type == InstanceType.NetSegment) {
+                    ushort segmentID = instanceID.NetSegment;
+                    var copy = segmentID.ToSegment();
+                    netMan.ReleaseSegment(segmentID, true);
+                    segmentID = CreateSegment(
+                        startNodeID: copy.m_endNode,
+                        endNodeID: copy.m_startNode,
+                        startDir: copy.m_endDirection,
+                        endDir: copy.m_startDirection,
+                        info: copy.Info,
+                        invert: copy.IsInvert());
+                    simMan.m_ThreadingWrapper.QueueMainThread(() => {
+                        SelectedInstanceID = new InstanceID { NetSegment = segmentID };
+                        DisplayPanel.Instance.Display(SelectedInstanceID);
+                    });
+                }
+            } catch (Exception ex) { ex.Log(); }
+        }
+
+        void ReverseInvertSegment() {
+            try {
+                InstanceID instanceID = SelectedInstanceID;
+                Log.Called(instanceID);
+                if (instanceID.Type == InstanceType.NetSegment) {
+                    ushort segmentID = instanceID.NetSegment;
+                    var copy = segmentID.ToSegment();
+                    netMan.ReleaseSegment(segmentID, true);
+                    segmentID = CreateSegment(
+                        startNodeID: copy.m_endNode,
+                        endNodeID: copy.m_startNode,
+                        startDir: copy.m_endDirection,
+                        endDir: copy.m_startDirection,
+                        info: copy.Info,
+                        invert: !copy.IsInvert());
+                    simMan.m_ThreadingWrapper.QueueMainThread(() => {
+                        SelectedInstanceID = new InstanceID { NetSegment = segmentID };
+                        DisplayPanel.Instance.Display(SelectedInstanceID);
+                    });
+                }
             } catch (Exception ex) { ex.Log(); }
         }
 
@@ -198,8 +250,6 @@ namespace NetworkDetective.Tool {
             return segmentID;
         }
 
-        static 
-
         protected override void OnSecondaryMouseClicked() {
             if (Mode == ModeT.Display && SelectedInstanceID.IsEmpty) {
                 DisableTool();
@@ -207,19 +257,6 @@ namespace NetworkDetective.Tool {
                 GoToPanel.Instance.Hide();
                 SelectedInstanceID = InstanceID.Empty;
                 DisplayPanel.Instance.Display(InstanceID.Empty);
-                if(UpdateToggle.Instance.isChecked)
-                    UpdateInstance(SelectedInstanceID);
-            }
-        }
-
-        static void UpdateInstance(InstanceID instanceID) {
-            switch (instanceID.Type) {
-                case InstanceType.NetNode:
-                    SimulationManager.instance.AddAction(() => NetManager.instance.UpdateNode(instanceID.NetNode));
-                    break;
-                case InstanceType.NetSegment:
-                    SimulationManager.instance.AddAction(() => NetManager.instance.UpdateSegment(instanceID.NetSegment));
-                    break;
             }
         }
     } //end class

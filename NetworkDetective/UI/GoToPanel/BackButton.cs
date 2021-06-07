@@ -41,7 +41,6 @@ namespace NetworkDetective.UI.ControlPanel {
                 atlas = TextureUtil.CreateTextureAtlas("back.png", AtlasName, SIZE, SIZE, spriteNames);
             }
 
-            Log.Debug("atlas name is: " + atlas.name);
             this.atlas = atlas;
 
             hoveredBgSprite = BackButtonBgHovered;

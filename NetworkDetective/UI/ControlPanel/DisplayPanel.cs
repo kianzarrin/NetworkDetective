@@ -8,9 +8,6 @@ namespace NetworkDetective.UI.ControlPanel {
     using UnityEngine;
     using GoToPanel;
     using NetworkDetective.Tool;
-    using static System.Environment;
-    using NetworkDetective.UI.ReversePanel;
-
 
     // TODO node lanes 
     // TODO lane as title. ?
@@ -97,12 +94,6 @@ namespace NetworkDetective.UI.ControlPanel {
 
                 var gotoBtn = dragHandle_.AddUIComponent<GoToButton>();
                 gotoBtn.relativePosition = new Vector2(width - 80, 3f);
-
-                var reverseBtn = dragHandle_.AddUIComponent<ReverseButton>();
-                reverseBtn.relativePosition = new Vector2(width - 120, 3f);
-
-                var updateBtn = dragHandle_.AddUIComponent<UpdateToggle>();
-                updateBtn.relativePosition = new Vector2(width - 160, 3f);
             }
 
             AddSpacePanel(this, 10);
@@ -124,6 +115,14 @@ namespace NetworkDetective.UI.ControlPanel {
                 Details.wordWrap = true;
             }
 
+            AddSpacePanel(this, 3);
+            {
+                var panel = AddPanel();
+                panel.AddUIComponent<UILabel>().text = "Action:";
+                var actionDD = panel.AddUIComponent<ActionDropDown>();
+                actionDD.width = width;
+            }
+
             isVisible = false;
             started_ = true;
         }
@@ -143,10 +142,11 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         static UIPanel AddSpacePanel(UIPanel panel, int space) {
-            panel = panel.AddUIComponent<UIPanel>();
-            panel.width = panel.width;
-            panel.height = space;
-            return panel;
+            var panel2 = panel.AddUIComponent<UIPanel>();
+            panel2.width = panel.width - panel2.padding.horizontal;
+            panel2.height = space;
+            panel2.isInteractive = false;
+            return panel2;
         }
 
         public void Populate() {
@@ -258,13 +258,20 @@ namespace NetworkDetective.UI.ControlPanel {
             if (!started_)
                 return;
             GoToPanel.Instance.Close();
-            ReversePanel.Instance.Close();
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
             if (isVisible && InstanceID == instanceID)
                 return;
             Log.Called();
             Show();
             InstanceID = instanceID;
+            RefreshSizeRecursive();
+        }
+
+        public void RefreshAll() {
+            if (!started_)
+                return;
+            Log.Called();
+            InstanceID = InstanceID;
             RefreshSizeRecursive();
         }
 
