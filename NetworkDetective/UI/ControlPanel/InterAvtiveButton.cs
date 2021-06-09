@@ -84,31 +84,36 @@ namespace NetworkDetective.UI.ControlPanel {
         }
 
         public string GetDetails() {
-            if (InstanceID.IsEmpty)
-                return "Please Hover/Select a network";
+            try {
+                if (InstanceID.IsEmpty)
+                    return "Please Hover/Select a network";
 #pragma warning disable
-             switch(InstanceID.Type) {
-                case InstanceType.NetNode:
-                    return "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
-                case InstanceType.NetSegment:
-                    return
-                        "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment) + "\n" +
-                        "prefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();           
-                case InstanceType.NetLane:
-                    try {
+                switch (InstanceID.Type) {
+                    case InstanceType.NetNode:
+                        return "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
+                    case InstanceType.NetSegment:
                         return
-                            "lane flags: " + FlagsUtil.GetLaneFlags(LaneData.LaneID) + "\n" +
-                            "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
-                            "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
-                            "direction: " + LaneData.LaneInfo.m_direction + "\n" +
-                            "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
-                            "start node:" + LaneData.StartNode + "\n";
-                    } catch (Exception ex) {
-                        return LaneData + "\n" + ex.Message;
-                    }
-                default:
-                    return "Unexpected InstanceID.Type: " + InstanceID.Type;
-            };
+                            "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment) + "\n" +
+                            "prefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();
+                    case InstanceType.NetLane:
+                        try {
+                            return
+                                "lane flags: " + FlagsUtil.GetLaneFlags(LaneData.LaneID) + "\n" +
+                                "lane types: " + LaneData.LaneInfo.m_laneType + "\n" +
+                                "vehicle types: " + LaneData.LaneInfo.m_vehicleType + "\n" +
+                                "direction: " + LaneData.LaneInfo.m_direction + "\n" +
+                                "final direction: " + LaneData.LaneInfo.m_finalDirection + "\n" +
+                                "start node:" + LaneData.StartNode + "\n";
+                        }
+                        catch (Exception ex) {
+                            return LaneData + "\n" + ex.Message;
+                        }
+                    default:
+                        return "Unexpected InstanceID.Type: " + InstanceID.Type;
+                };
+            }catch(Exception ex) {
+                return ex.ToString();
+            }
 #pragma warning enable
         }
 

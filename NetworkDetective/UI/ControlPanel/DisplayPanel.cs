@@ -191,17 +191,28 @@ namespace NetworkDetective.UI.ControlPanel {
 
             AddSpacePanel(panel, 5);
 
-            foreach(var laneData in NetUtil.IterateSegmentLanes(segmentId)) {
+            ref var segment = ref segmentId.ToSegment();
+
+            var lanes = segment.Info.m_lanes;
+            int laneIndex = 0;
+            for (uint laneID = segment.m_lanes; laneID != 0; laneID = laneID.ToLane().m_nextLane) {
                 var item = panel.AddUIComponent<InterActiveButton>();
-                item.SetLaneData(laneData);
-                item.text = $"Lane[{item.LaneData.LaneIndex}]: {item.InstanceID.NetLane}";
-                if(laneData.SegmentID == segmentId)
-                    item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
-                else {
-                    item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
+                if (laneIndex < lanes.Length) {
+                    LaneData laneData = new LaneData(laneID, laneIndex);
+                    item.SetLaneData(laneData);
+                    item.text = $"Lane[{laneIndex}]: {laneID}";
+                    if (laneData.SegmentID != segmentId) {
+                        item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
+                    }
+                } else {
+                    LaneData laneData = new LaneData { LaneID = laneID, LaneIndex = laneIndex };
+                    item.SetLaneData(laneData);
+                    item.text = $"Lane[{laneIndex}]: {laneID}";
+                    item.text += $"error: lane count does not match segment:{laneData.SegmentID} info={segment.Info.name}\n" +
+                        $"laneID:{laneID} laneIndex:{laneIndex} laneCount:{lanes.Length}";
                     Log.Error(item.text);
                 }
-                InterActiveButtons.Add(item);
+                laneIndex++;
             }
         }
 
