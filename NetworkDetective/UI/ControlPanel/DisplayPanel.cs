@@ -201,7 +201,9 @@ namespace NetworkDetective.UI.ControlPanel {
                     LaneData laneData = new LaneData(laneID, laneIndex);
                     item.SetLaneData(laneData);
                     item.text = $"Lane[{laneIndex}]: {laneID}";
-                    if (laneData.SegmentID != segmentId) {
+                    if (laneData.SegmentID == segmentId) {
+                        item.text += $" ( {item.LaneData.LaneInfo.m_laneType} | {item.LaneData.LaneInfo.m_vehicleType} ) ";
+                    } else {
                         item.text += $"error: lane.m_segment={laneData.SegmentID} does not match. " + laneData;
                     }
                 } else {
@@ -212,6 +214,7 @@ namespace NetworkDetective.UI.ControlPanel {
                         $"laneID:{laneID} laneIndex:{laneIndex} laneCount:{lanes.Length}";
                     Log.Error(item.text);
                 }
+                InterActiveButtons.Add(item);
                 laneIndex++;
             }
         }
