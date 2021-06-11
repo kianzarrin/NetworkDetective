@@ -17,14 +17,12 @@ namespace NetworkDetective.UI.ControlPanel {
             get => _instanceID;
             set {
                 _instanceID = value;
-                if (value.Type == InstanceType.NetLane)
+                if (value.Type == InstanceType.NetLane) {
                     LaneData = NetUtil.GetLaneData(value.NetLane);
-                else LaneData = default;
-
-                if (RemoveButton) {
-                    RemoveButton.isVisible =
-                        InstanceID.Type == InstanceType.NetNode ||
-                        InstanceID.Type == InstanceType.NetSegment;
+                    DropRemoveButton();
+                } else {
+                    LaneData = default;
+                    AddRemoveButton();
                 }
             }
         }
@@ -34,6 +32,7 @@ namespace NetworkDetective.UI.ControlPanel {
         public void SetLaneData(LaneData laneData) {
             LaneData = laneData;
             _instanceID = new InstanceID { NetLane = laneData.LaneID };
+            DropRemoveButton();
         }
 
         public override void Awake() {
@@ -48,12 +47,17 @@ namespace NetworkDetective.UI.ControlPanel {
             normalBgSprite = disabledBgSprite = focusedBgSprite = "ButtonSmall";
             hoveredBgSprite = "ButtonSmallHovered";
             pressedBgSprite = "ButtonSmallPressed";
+        }
 
+        public void AddRemoveButton() {
             RemoveButton = AddUIComponent<RemoveButton>();
             RemoveButton.size = new Vector2(30, 30);
             RemoveButton.relativePosition = new Vector2(width - 30, 0);
-            RemoveButton.isVisible = false;
             RemoveButton.eventClick += RemoveButton_eventClick;
+        }
+
+        public void DropRemoveButton() {
+            Destroy(RemoveButton?.gameObject);
         }
 
         private void RemoveButton_eventClick(UIComponent component, UIMouseEventParameter eventParam) {
