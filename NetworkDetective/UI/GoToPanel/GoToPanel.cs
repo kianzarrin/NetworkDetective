@@ -88,7 +88,6 @@ namespace NetworkDetective.UI.GoToPanel {
                     NodeButton.text = "Node";
                     NodeButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
                         InstanceID id = new InstanceID { NetNode = (ushort)ID };
-                        NetworkDetectiveTool.Instance.SelectedInstanceID = id;
                         DisplayPanel.Instance.Display(id);
                         GoToInstance(id);
                     };
@@ -97,7 +96,6 @@ namespace NetworkDetective.UI.GoToPanel {
                     SegmentButton.text = "Segment";
                     SegmentButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
                         InstanceID id = new InstanceID { NetSegment = (ushort)ID };
-                        NetworkDetectiveTool.Instance.SelectedInstanceID = id;
                         DisplayPanel.Instance.Display(id);
                         GoToInstance(id);
                     };
@@ -107,7 +105,6 @@ namespace NetworkDetective.UI.GoToPanel {
                     LaneButton.eventClicked += (UIComponent component, UIMouseEventParameter eventParam) => {
                         ushort segmentId = ID.ToLane().m_segment;
                         InstanceID id = new InstanceID { NetSegment = segmentId };
-                        NetworkDetectiveTool.Instance.SelectedInstanceID = id;
                         DisplayPanel.Instance.Display(id);
                         GoToInstance(id);
                     };

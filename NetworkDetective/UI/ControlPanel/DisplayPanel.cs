@@ -273,9 +273,11 @@ namespace NetworkDetective.UI.ControlPanel {
                 return;
             GoToPanel.Instance.Close();
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
+            NetworkDetectiveTool.Instance.SelectedInstanceID = instanceID;
             if (isVisible && InstanceID == instanceID)
                 return;
-            Log.Called();
+            Log.Called(instanceID);
+            Log.Debug(System.Environment.StackTrace);
             Show();
             InstanceID = instanceID;
             RefreshSizeRecursive();

@@ -122,10 +122,9 @@ namespace NetworkDetective.Tool {
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo) {
             try {
                 base.RenderOverlay(cameraInfo);
-                if (!enabled)
-                    return;
-                if (Mode == ModeT.Display) {
+                if (enabled && Mode == ModeT.Display) {
                     if (!SelectedInstanceID.IsValid()) {
+                        Log.Debug($"SelectedInstanceID:{SelectedInstanceID} is invalid. Display hovered instance.");
                         DisplayPanel.Instance.Display(GetHoveredInstanceID());
                     } else {
                         DisplayPanel.Instance.Display(SelectedInstanceID);
