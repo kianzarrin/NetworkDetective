@@ -287,12 +287,14 @@ namespace NetworkDetective.UI.ControlPanel {
             RefreshSizeRecursive();
         }
 
-        public void Display(InstanceID instanceID) {
+        public void Display(InstanceID instanceID, bool select = true) {
             if (!started_)
                 return;
             GoToPanel.Instance.Close();
             NetworkDetectiveTool.Instance.Mode = NetworkDetectiveTool.ModeT.Display;
-            NetworkDetectiveTool.Instance.SelectedInstanceID = instanceID;
+            if (select) {
+                NetworkDetectiveTool.Instance.SelectedInstanceID = instanceID;
+            }
             if (isVisible && InstanceID == instanceID)
                 return;
             Log.Called(instanceID);

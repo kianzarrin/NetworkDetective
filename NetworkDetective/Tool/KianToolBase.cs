@@ -63,7 +63,7 @@ namespace NetworkDetective.Tool {
         protected bool IsMouseRayValid => !UIView.IsInsideUI() && Cursor.visible && m_mouseRayValid;
         protected bool HoverValid => IsMouseRayValid && (HoveredSegmentId != 0 || HoveredNodeId != 0);
 
-        private bool DetermineHoveredElements()
+        protected virtual bool DetermineHoveredElements()
         {
             HoveredSegmentId = 0;
             HoveredNodeId = 0;

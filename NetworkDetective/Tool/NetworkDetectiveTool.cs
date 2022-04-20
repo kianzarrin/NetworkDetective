@@ -102,6 +102,15 @@ namespace NetworkDetective.Tool {
             } catch (Exception ex) { ex.Log(); }
         }
 
+        protected override bool DetermineHoveredElements() {
+            if (DisplayPanel.Instance != null && DisplayPanel.Instance.containsMouse) {
+                // prevent panel flipping.
+                return HoveredNodeId != 0 || HoveredSegmentId != 0;
+            } else {
+                return base.DetermineHoveredElements();
+            }
+        }
+
         protected override void OnToolUpdate() {
             base.OnToolUpdate();
             if (Mode == ModeT.Display && HoverValid)
@@ -111,7 +120,7 @@ namespace NetworkDetective.Tool {
         }
 
         public InstanceID GetHoveredInstanceID() {
-            if (!HoverValid)
+            if (HoveredNodeId == 0 && HoveredSegmentId == 0)
                 return InstanceID.Empty;
             else if (Helpers.ControlIsPressed)
                 return new InstanceID { NetNode = HoveredNodeId };
@@ -125,9 +134,9 @@ namespace NetworkDetective.Tool {
                 if (enabled && Mode == ModeT.Display) {
                     if (!SelectedInstanceID.IsValid()) {
                         Log.Debug($"SelectedInstanceID:{SelectedInstanceID} is invalid. Display hovered instance.");
-                        DisplayPanel.Instance.Display(GetHoveredInstanceID());
+                        DisplayPanel.Instance.Display(GetHoveredInstanceID(), select: false);
                     } else {
-                        DisplayPanel.Instance.Display(SelectedInstanceID);
+                        DisplayPanel.Instance.Display(SelectedInstanceID, select: false);
                         RenderUtil.RenderInstanceOverlay(cameraInfo, GetHoveredInstanceID(), Color.white, true);
                     }
                     DisplayPanel.Instance.RenderOverlay(cameraInfo);
