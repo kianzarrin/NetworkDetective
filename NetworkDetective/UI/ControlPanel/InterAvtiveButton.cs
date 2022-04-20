@@ -1,5 +1,6 @@
 using ColossalFramework.UI;
 using KianCommons;
+using KianCommons.Plugins;
 using KianCommons.UI;
 using NetworkDetective.Util;
 using System;
@@ -92,13 +93,23 @@ namespace NetworkDetective.UI.ControlPanel {
                 if (InstanceID.IsEmpty)
                     return "Please Hover/Select a network";
 #pragma warning disable
+                string ret;
                 switch (InstanceID.Type) {
                     case InstanceType.NetNode:
-                        return "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
+                        ret = "node flags: " + FlagsUtil.GetNodeFlags(InstanceID.NetNode);
+                        ushort segmentId;
+                        bool startNode;
+                        if (AdaptiveRoadsUtil.IsActive && DisplayPanel.Instance.IsSegmentEndHoverd(out segmentId, out startNode)) {
+                            ret += "\n" + FlagsUtil.GetSegmentEndFlags(segmentId: segmentId, startNode: startNode);
+                        }
+                        return ret;
                     case InstanceType.NetSegment:
-                        return
-                            "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment) + "\n" +
-                            "prefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();
+                        ret = "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment);
+                        if (AdaptiveRoadsUtil.IsActive && DisplayPanel.Instance.IsSegmentEndHoverd(out segmentId, out startNode)) {
+                            ret += "\n" + FlagsUtil.GetSegmentEndFlags(segmentId: segmentId, startNode: startNode);
+                        }
+                        ret += "\nprefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();
+                        return ret;
                     case InstanceType.NetLane:
                         try {
                             return

@@ -21,19 +21,19 @@ namespace NetworkDetective.Util {
         public static string GetSegmentFlags(ushort segmentId) {
             var a = segmentId.ToSegment().m_flags;
             var b = AdaptiveRoadsUtil.GetARSegmentFlags(segmentId);
-            var start = AdaptiveRoadsUtil.GetARSegmentEndFlags(segmentId, true);
-            var end = AdaptiveRoadsUtil.GetARSegmentEndFlags(segmentId, false);
-#pragma warning disable HAA0201 // Implicit string concatenation allocation
-            return FlagsToString(a, b)
-                + "\nStart: " + start
-                + "\nEnd: " + end;
-#pragma warning restore HAA0201 // Implicit string concatenation allocation
+            return FlagsToString(a, b);
         }
 
         public static string GetLaneFlags(uint laneID) {
             var a = laneID.ToLane().Flags();
             var b = AdaptiveRoadsUtil.GetARLaneFlags(laneID);
             return FlagsToString(a, b);
+        }
+
+        public static string GetSegmentEndFlags(ushort segmentId, bool startNode) {
+            var flags = AdaptiveRoadsUtil.GetARSegmentEndFlags(segmentId, startNode);
+            string title = startNode ? "Start" : "End";
+            return $"Segment{title}: {flags}";
         }
     }
 }

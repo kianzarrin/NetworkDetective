@@ -8,6 +8,7 @@ namespace NetworkDetective.UI.ControlPanel {
     using UnityEngine;
     using GoToPanel;
     using NetworkDetective.Tool;
+    using System.Linq;
 
     // TODO node lanes 
     // TODO lane as title. ?
@@ -35,6 +36,24 @@ namespace NetworkDetective.UI.ControlPanel {
         public UIAutoSizePanel PupulatablePanel;
         public UILabel Details;
         public InterActiveButton Title;
+        public InterActiveButton Hovered => InterActiveButtons.FirstOrDefault(b => b.IsHovered);
+
+        public bool IsSegmentEndHoverd(out ushort segmentId, out bool startNode) {
+            segmentId = 0;
+            ushort nodeId = 0;
+            var instanceIDs = new[] { Hovered?.InstanceID, Title?.InstanceID };
+            foreach(var item in instanceIDs) {
+                if (!item.HasValue)
+                    break;
+                var instanceID = item.Value;
+                if (instanceID.Type == InstanceType.NetNode)
+                    nodeId = instanceID.NetNode;
+                else if (instanceID.Type == InstanceType.NetSegment)
+                    segmentId = instanceID.NetSegment;
+            }
+            startNode = segmentId.ToSegment().IsStartNode(nodeId);
+            return segmentId != 0 && nodeId != 0;
+        }
 
         public static DisplayPanel Create() {
             Log.Called();
