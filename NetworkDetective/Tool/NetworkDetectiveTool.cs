@@ -5,10 +5,11 @@ using KianCommons.UI;
 using NetworkDetective.UI.ControlPanel;
 using NetworkDetective.UI.GoToPanel;
 using System;
+using UnifiedUI.Helpers;
 using UnityEngine;
 
 namespace NetworkDetective.Tool {
-    public sealed class NetworkDetectiveTool : KianToolBase {
+    public sealed class NetworkDetectiveTool : KianToolBase{
         public static readonly SavedInputKey ActivationShortcut = new SavedInputKey(
             "ActivationShortcut",
             UI.ModSettings.FILE_NAME,
@@ -19,9 +20,18 @@ namespace NetworkDetective.Tool {
 
         static SimulationManager simMan = SimulationManager.instance;
         static NetManager netMan = NetManager.instance;
+        UIComponent uuiButton_;
 
         protected override void Awake() {
             Log.Called();
+            string iconPath = UUIHelpers.GetFullPath<NetworkDetectiveMod>("uui_network_detective.png");
+            uuiButton_ = UUIHelpers.RegisterToolButton(
+                    name: "Network Detective",
+                    groupName: null, // default group
+                    tooltip: "Network Detective",
+                    tool: this,
+                    icon: UUIHelpers.LoadTexture(iconPath),
+                    hotkeys: new UUIHotKeys { ActivationKey = ActivationShortcut});
             base.Awake();
         }
 
@@ -78,6 +88,7 @@ namespace NetworkDetective.Tool {
                 Log.Debug("NetworkDetectiveTool.OnDestroy()\n" + Environment.StackTrace);
                 button?.Hide();
                 Destroy(button);
+                uuiButton_?.Destroy();
             } catch (Exception ex) { ex.Log(); }
             base.OnDestroy();
         }
