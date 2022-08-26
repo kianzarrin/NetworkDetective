@@ -102,13 +102,24 @@ namespace NetworkDetective.UI.ControlPanel {
                         if (AdaptiveRoadsUtil.IsActive && DisplayPanel.Instance.IsSegmentEndHoverd(out segmentId, out startNode)) {
                             ret += "\n" + FlagsUtil.GetSegmentEndFlags(segmentId: segmentId, startNode: startNode);
                         }
+                        string sharedTags = FlagsUtil.GetNodeTags(InstanceID.NetNode);
+                        string combinedTags = FlagsUtil.GetNodeCombinedTags(InstanceID.NetNode);
+                        if (sharedTags != "" || combinedTags != "") {
+                            ret += "\nshared tags: " + sharedTags;
+                            ret += "\nall tags: " + combinedTags;
+                        }
                         return ret;
                     case InstanceType.NetSegment:
                         ret = "segment flags: " + FlagsUtil.GetSegmentFlags(InstanceID.NetSegment);
                         if (AdaptiveRoadsUtil.IsActive && DisplayPanel.Instance.IsSegmentEndHoverd(out segmentId, out startNode)) {
                             ret += "\n" + FlagsUtil.GetSegmentEndFlags(segmentId: segmentId, startNode: startNode);
                         }
-                        ret += "\nprefab: " + InstanceID.NetSegment.ToSegment().Info?.name.ToSTR();
+                        NetInfo segmentInfo = InstanceID.NetSegment.ToSegment().Info;
+                        ret += "\nprefab: " + segmentInfo?.name.ToSTR();
+
+                        var prefabTags = FlagsUtil.ArrayToString(segmentInfo?.m_tags);
+                        if(prefabTags != "")
+                            ret += "\nprefab tags:" + prefabTags;
                         return ret;
                     case InstanceType.NetLane:
                         try {

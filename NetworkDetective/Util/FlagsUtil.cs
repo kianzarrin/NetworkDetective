@@ -1,6 +1,7 @@
 namespace NetworkDetective.Util {
     using KianCommons;
     using KianCommons.Plugins;
+    using System.Collections.Generic;
 
     internal static class FlagsUtil {
         static string FlagsToString(object a, object b) {
@@ -13,8 +14,53 @@ namespace NetworkDetective.Util {
             }
         }
 
+
+        internal static string ArrayToString(string[] ar) {
+            string ret = "";
+            if (ar != null) {
+                bool first = true;
+                foreach (string item in ar) {
+                    if (!first) ret += ", ";
+                    ret += item;
+                    first = false;
+                }
+            }
+            return ret;
+        }
+
+        public static string GetNodeTags(ushort nodeID) {
+            string []tags = NetUtil.GetTags(nodeID.ToNode().m_tags);
+            return ArrayToString(tags);
+        }
+
+        /// <summary>
+        /// camma seperated list of tag(count)
+        /// </summary>
+        public static string GetNodeCombinedTags(ushort nodeID) {
+            Dictionary<string, int> tags = new(); // tag name -> occurance count
+            foreach(ushort segmentId  in nodeID.ToNode().IterateSegments()) {
+                foreach (var tag in segmentId.ToSegment().Info.m_tags) {
+                    if (!tags.ContainsKey(tag)) {
+                        tags[tag] = 0;
+                    }
+                    tags[tag]++;
+                }
+            }
+
+            string ret = "";
+            bool first = true;
+            foreach (var pair in tags) {
+                if (!first) ret += ", ";
+                ret += $"{pair.Key}({pair.Value})";
+                first = false;
+            }
+
+
+            return ret;
+        }
+
         public static string GetNodeFlags(ushort nodeID) {
-            var a = nodeID.ToNode().m_flags;
+            var a = nodeID.ToNode().flags;
             var b = AdaptiveRoadsUtil.GetARNodeFlags(nodeID);
             return FlagsToString(a, b);
         }
