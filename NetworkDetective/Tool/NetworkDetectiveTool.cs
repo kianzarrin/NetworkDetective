@@ -42,6 +42,7 @@ namespace NetworkDetective.Tool {
 
         public ModeT Mode;
 
+        public static ActionModeT[] ActionModes => EnumBitMaskExtensions.GetEnumValues<ActionModeT>();
         public enum ActionModeT {
             None,
             Update,
@@ -50,7 +51,7 @@ namespace NetworkDetective.Tool {
             InvertReverse,
         }
 
-        public ActionModeT ActionMode => ActionDropDown.Instance.SelectedAction;
+        public ActionModeT ActionMode;
 
         public static NetworkDetectiveTool Create() {
             try {

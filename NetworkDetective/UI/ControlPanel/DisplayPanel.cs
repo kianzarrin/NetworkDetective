@@ -137,10 +137,25 @@ namespace NetworkDetective.UI.ControlPanel {
             AddSpacePanel(this, 3);
             {
                 var panel = AddPanel();
-                panel.AddUIComponent<UILabel>().text = "Action:";
-                var actionDD = panel.AddUIComponent<ActionDropDown>();
-                actionDD.width = width;
+                panel.AddUIComponent<UILabel>().text = " Action on select:";
             }
+            {
+
+                var panel = this.AddUIComponent<UIPanel>();
+                panel.width = width - 3;
+                panel.autoLayoutDirection = LayoutDirection.Horizontal;
+                panel.autoFitChildrenVertically = true;
+                panel.autoLayout = true;
+                panel.padding = new RectOffset(3, 0, 0, 0);
+                panel.autoLayoutPadding = new RectOffset(45, 0, 0, 0);
+
+                foreach (var actionMode in NetworkDetectiveTool.ActionModes) {
+                    var rb = panel.AddUIComponent<ActionRadioButton>();
+                    rb.ActionMode = actionMode;
+                }
+            }
+
+            AddSpacePanel(this, 3);
 
             isVisible = false;
             started_ = true;

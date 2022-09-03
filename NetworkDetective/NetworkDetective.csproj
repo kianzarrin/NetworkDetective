@@ -58,6 +58,7 @@
     <None Remove="UI\ReversePanel\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="UI\ControlPanel\ActionDropDown.cs" />
     <Compile Remove="UI\ControlPanel\ReverseButton.cs" />
     <Compile Remove="UI\ControlPanel\UpdateToggle.cs" />
   </ItemGroup>
@@ -110,6 +111,9 @@
     <Compile Include="KianCommons\KianCommons\Util\TypeUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Resources\actions.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\back.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
