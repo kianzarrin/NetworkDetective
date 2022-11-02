@@ -34,16 +34,19 @@ namespace NetworkDetective.Util {
         }
 
         /// <summary>
-        /// camma seperated list of tag(count)
+        /// comma separated list of tag(count)
         /// </summary>
         public static string GetNodeCombinedTags(ushort nodeID) {
-            Dictionary<string, int> tags = new(); // tag name -> occurance count
+            Dictionary<string, int> tags = new(); // tag name -> occurrence count
             foreach(ushort segmentId  in nodeID.ToNode().IterateSegments()) {
-                foreach (var tag in segmentId.ToSegment().Info.m_tags) {
-                    if (!tags.ContainsKey(tag)) {
-                        tags[tag] = 0;
+                string[] segmentTags = segmentId.ToSegment().Info.m_tags;
+                if (segmentTags != null) {
+                    foreach (var tag in segmentTags) {
+                        if (!tags.ContainsKey(tag)) {
+                            tags[tag] = 0;
+                        }
+                        tags[tag]++;
                     }
-                    tags[tag]++;
                 }
             }
 
