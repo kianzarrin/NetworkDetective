@@ -38,8 +38,8 @@ namespace NetworkDetective.UI {
                 "Update All Roads (slower)",
                 () => SimulationManager.instance.AddAction(UpdateAllRoads));
             helper.AddButton(
-                "Refresh all Network Renderers (faster)",
-                () => SimulationManager.instance.AddAction(RefreshAllNetworkRenderers));
+                "Recalculate all nodes (faster)",
+                () => SimulationManager.instance.AddAction(RecalculateAllNodes));
         }
 
         static void UpdateAllRoads() {
@@ -56,8 +56,13 @@ namespace NetworkDetective.UI {
             for (ushort nodeID = 0; nodeID < NetManager.MAX_NODE_COUNT; ++nodeID)
                 if (NetUtil.IsNodeValid(nodeID))
                     NetManager.instance.UpdateNodeRenderer(nodeID, true);
+        }
 
-
+        static void RecalculateAllNodes () {
+            for (ushort nodeID = 0; nodeID < NetManager.MAX_NODE_COUNT; ++nodeID)
+                if (NetUtil.IsNodeValid(nodeID))
+                    nodeID.ToNode().CalculateNode(nodeID);
+            RefreshAllNetworkRenderers();
         }
     }
 }
